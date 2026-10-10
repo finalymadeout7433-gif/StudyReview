@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block content %}
+<a class="back-link" href="{{ cancel_url }}">← 返回</a><section class="page-heading"><div><span class="eyebrow">{{ subtitle|default:'记录每一次学习' }}</span><h1>{{ title }}</h1><p>带 * 的字段为必填，其他内容可以稍后完善。</p></div></section>
+{% if needs_course and not form.fields.course.queryset.exists %}<div class="onboarding"><div><h2>先创建一门活跃课程</h2><p>任务与错题都需要归属课程。归档课程须先恢复。</p></div><a class="button primary" href="{% url 'course-create' %}">创建课程</a></div>{% else %}<section class="panel form-panel"><form method="post" class="stack-form" {% if question_form %}data-question-form{% endif %}>{% csrf_token %}{% include 'partials/fields.html' %}{% if question_form %}{% include 'partials/image_uploader.html' %}{% endif %}<div class="form-actions"><button class="button primary" type="submit" data-save>保存</button><a class="button secondary" href="{{ cancel_url }}">取消</a></div></form></section>{% endif %}
+{% endblock %}

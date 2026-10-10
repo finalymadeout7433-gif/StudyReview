@@ -1,0 +1,9 @@
+{
+  "dependency": "proxy_tools==0.1.0",
+  "metadata_license": "MIT",
+  "official_project": "https://github.com/jtushman/proxy_tools",
+  "official_file": "https://github.com/jtushman/proxy_tools/blob/master/LICENSE.txt",
+  "git_blob_sha1": "078411c7399fbc0454f36cbe8c8cdbaaba7ebc95",
+  "sha256": "a428fb8a2e762af3eb0a6edbbb88e9b42ccfee80fd9b423958bcacf9b9abbfe4",
+  "reason": "Installed metadata omitted license text; preserve upstream text unchanged."
+}

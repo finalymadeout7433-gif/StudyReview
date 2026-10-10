@@ -1,0 +1,9 @@
+{% for hidden in form.hidden_fields %}{{ hidden }}{% for error in hidden.errors %}<p class="field-error" role="alert">{{ error }}</p>{% endfor %}{% endfor %}
+{% if form.non_field_errors %}<div class="notice error" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+{% for field in form.visible_fields %}
+<div class="field {% if field.errors %}has-error{% endif %}">
+<label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required" aria-label="必填"> *</span>{% else %}<span class="optional">选填</span>{% endif %}</label>
+{{ field }}
+{% if field.help_text %}<div class="help-text">{{ field.help_text|safe }}</div>{% endif %}
+{% for error in field.errors %}<p class="field-error" role="alert">{{ error }}</p>{% endfor %}
+</div>{% endfor %}

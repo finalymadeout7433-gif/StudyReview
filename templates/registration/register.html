@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block auth_content %}
+<header class="auth-masthead"><a class="brand" href="{% url 'login' %}"><span class="brand-mark" aria-hidden="true"></span><span>拾习<small>学习与复习管理</small></span></a><span>STUDY &amp; REVIEW / 每天向前一点</span></header>
+<section class="auth-story"><span class="eyebrow"><span class="index">02</span> / 记录你的进步</span><h1><span>从今天，</span><span class="story-accent">开始积累。</span></h1><p>课程、任务与错题，<br>都属于你自己的学习空间。</p><div class="auth-route"><span><b>01</b>安排任务</span><span><b>02</b>记录错题</span><span><b>03</b>定期回顾</span></div></section>
+<section class="auth-card" aria-labelledby="register-heading"><span class="eyebrow">ACCOUNT / 创建账户</span><h2 id="register-heading">创建学习账户</h2><p class="muted">从一个小计划开始。</p><form method="post" class="stack-form">{% csrf_token %}{% include 'partials/fields.html' %}<button class="button primary wide" type="submit">注册并开始学习</button></form><p class="auth-switch">已有账户？ <a href="{% url 'login' %}">返回登录</a></p></section><p class="auth-caption">拾习 / 任务有安排 · 错题有归处 · 复习有记录</p>
+{% endblock %}

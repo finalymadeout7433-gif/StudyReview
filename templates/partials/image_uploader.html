@@ -1,0 +1,9 @@
+<section class="image-editor" data-image-editor="question" aria-label="题目图片附件">
+  <div class="image-editor-heading"><div><h2>题目图片</h2><p>文字记录和图片一起保留。可选择图片、拖放，或在输入框粘贴截图。</p></div><button type="button" class="button secondary small" data-image-choose>选择图片</button></div>
+  <input type="file" accept="image/png,image/jpeg,image/webp" multiple data-image-input hidden>
+  <div class="image-dropzone" data-image-drop tabindex="0">拖放图片到这里 · PNG / JPEG / WebP · 每张不超过8 MB</div>
+  <p class="image-upload-status" role="status" data-image-status></p>
+  <div class="image-edit-list" data-image-list></div>
+  <p class="help-text">保存时可将图片归入题干、原答、参考答案或错因。去除位置等元数据，保留原分辨率；不会自动识别图片。</p>
+</section>
+{{ initial_question_images|json_script:'initial-question-images' }}

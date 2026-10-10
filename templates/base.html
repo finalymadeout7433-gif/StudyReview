@@ -1,0 +1,26 @@
+{% load static %}<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="theme-color" content="#f7f2ed"><title>{{ title|default:'学习与复习' }} · 拾习</title>
+<link rel="stylesheet" href="{% static 'css/app.css' %}?v=grid-b-20261003"><script src="{% static 'js/navigation-motion.js' %}?v=grid-b-20261003"></script><link rel="stylesheet" href="{% static 'css/v2.css' %}?v=2.0"><script src="{% static 'js/images.js' %}?v=2.0" defer></script><script src="{% static 'js/app.js' %}" defer></script><script src="{% static 'js/assistant.js' %}?v=rc7-actions-20261004" defer></script><link rel="stylesheet" href="{% static 'css/assistant-actions.css' %}?v=rc7"></head>
+<body {% if user.is_authenticated %}class="has-mi-assistant" data-user-id="{{ user.pk }}"{% endif %}>
+<a class="skip-link" href="#main">跳到主要内容</a>
+{% if user.is_authenticated %}
+<div class="app-shell">
+<aside class="sidebar" aria-label="主要导航">
+<a class="brand" href="{% url 'dashboard' %}"><span class="brand-mark" aria-hidden="true"></span><span>拾习<small>学习与复习管理</small></span></a>
+<p class="nav-label">INDEX / 学习空间</p>
+<nav>{% for route,label,key in navigation %}<a class="nav-link {% if section == key %}active{% endif %}" href="{% url route %}" {% if section == key %}aria-current="page"{% endif %}><span class="nav-number" aria-hidden="true">{{ forloop.counter|stringformat:'02d' }}</span>{{ label }}</a>{% endfor %}</nav>
+<div class="sidebar-note"><strong>FSRS / 复习</strong><p>一次回顾，再向前一步。<br>按实际作答，安排下次复习。</p></div>
+<div class="user-panel"><span class="avatar" aria-hidden="true">{{ user.username|slice:':1'|upper }}</span><span class="username" title="{{ user.username }}">{{ user.username }}<small>个人学习账户</small></span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="text-button" type="submit">退出</button></form></div>
+</aside>
+<div class="workspace"><header class="topbar"><span><span class="breadcrumb-prefix">拾习 / </span>{{ title }}</span><span class="date-label">{{ today|date:'Y.m.d' }} / 上海时间</span></header>
+<main id="main" class="main-content" tabindex="-1">
+{% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<div class="notice {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+{% block content %}{% endblock %}
+<footer class="page-footer">拾习 / STUDY &amp; REVIEW · 让计划有条理，让复习有记录</footer></main></div></div>
+{% else %}
+<main id="main" class="auth-shell" tabindex="-1">{% if messages %}{% for message in messages %}<div class="notice">{{ message }}</div>{% endfor %}{% endif %}{% block auth_content %}{% endblock %}</main>
+{% endif %}
+{% if user.is_authenticated %}{% include 'partials/assistant_panel.html' %}{% endif %}
+</body></html>

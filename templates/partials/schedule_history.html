@@ -1,0 +1,13 @@
+{% if record.schedule_event %}
+<div class="schedule-explanation">
+<h3>本次复习如何改变安排</h3>
+<p>FSRS {{ record.schedule_event.algorithm_version }} 根据本次自评和此前状态更新估计值。目标保留率为90%，这是排期参数，不是对记忆效果的保证。</p>
+<div class="table-wrap"><table><thead><tr><th>状态</th><th>复习前</th><th>复习后</th></tr></thead><tbody>
+<tr><td>状态修订</td><td>{{ record.schedule_event.state_revision_before }}</td><td>{{ record.schedule_event.state_revision_after }}</td></tr>
+<tr><td>稳定性（天）</td><td>{{ record.schedule_event.before_state.stability|floatformat:2|default:'尚未估计' }}</td><td>{{ record.schedule_event.after_state.stability|floatformat:2 }}</td></tr>
+<tr><td>难度（1–10）</td><td>{{ record.schedule_event.before_state.difficulty|floatformat:2|default:'尚未估计' }}</td><td>{{ record.schedule_event.after_state.difficulty|floatformat:2 }}</td></tr>
+</tbody></table></div>
+<p>算法建议：<strong>{{ record.schedule_event.suggested_date|date:'Y-m-d' }}</strong>；实际安排：<strong>{{ record.schedule_event.applied_date|date:'Y-m-d' }}</strong>（上海日期）。{% if record.schedule_event.manual_override_date %}本次使用了自选日期，算法状态仍按本次作答更新。{% endif %}</p>
+<p class="help-text">稳定性和难度是模型估计，不是考试成绩。此处记录当时的状态与安排，后续编辑题目不会改写它们。</p>
+</div>
+{% endif %}

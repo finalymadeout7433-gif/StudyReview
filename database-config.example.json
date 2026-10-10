@@ -1,0 +1,9 @@
+{
+  "host": "127.0.0.1",
+  "port": 3306,
+  "database": "study_review_dev",
+  "application_user": "REPLACE_WITH_EXISTING_LOCAL_APPLICATION_USER",
+  "application_password": "REPLACE_LOCALLY_DO_NOT_COMMIT",
+  "administrator_user": "REPLACE_WITH_EXISTING_LOCAL_SCHEMA_ADMIN",
+  "administrator_password": "REPLACE_LOCALLY_DO_NOT_COMMIT"
+}

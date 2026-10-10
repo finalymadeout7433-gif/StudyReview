@@ -1,0 +1,361 @@
+{
+  "dependencies": [
+    {
+      "name": "Django",
+      "version": "5.2.17",
+      "license": "BSD-3-Clause",
+      "project_urls": [
+        "Homepage, https://www.djangoproject.com/",
+        "Documentation, https://docs.djangoproject.com/",
+        "Release notes, https://docs.djangoproject.com/en/stable/releases/",
+        "Funding, https://www.djangoproject.com/fundraising/",
+        "Source, https://github.com/django/django",
+        "Tracker, https://code.djangoproject.com/"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\Django\\django-5.2.17.dist-info\\licenses\\AUTHORS",
+        "materials\\desktop-licenses\\Django\\django-5.2.17.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\Django\\django-5.2.17.dist-info\\licenses\\LICENSE.python",
+        "materials\\desktop-licenses\\Django\\django\\contrib\\admin\\static\\admin\\css\\vendor\\select2\\LICENSE-SELECT2.md",
+        "materials\\desktop-licenses\\Django\\django\\contrib\\admin\\static\\admin\\img\\LICENSE",
+        "materials\\desktop-licenses\\Django\\django\\contrib\\admin\\static\\admin\\js\\vendor\\jquery\\LICENSE.txt",
+        "materials\\desktop-licenses\\Django\\django\\contrib\\admin\\static\\admin\\js\\vendor\\select2\\LICENSE.md",
+        "materials\\desktop-licenses\\Django\\django\\contrib\\admin\\static\\admin\\js\\vendor\\xregexp\\LICENSE.txt",
+        "materials\\desktop-licenses\\Django\\django\\contrib\\gis\\gdal\\LICENSE",
+        "materials\\desktop-licenses\\Django\\django\\contrib\\gis\\geos\\LICENSE",
+        "materials\\desktop-licenses\\Django\\django\\dispatch\\license.txt"
+      ]
+    },
+    {
+      "name": "mysqlclient",
+      "version": "2.3.0",
+      "license": "GPL-2.0-or-later",
+      "project_urls": [
+        "Project, https://github.com/PyMySQL/mysqlclient",
+        "Documentation, https://mysqlclient.readthedocs.io/"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\mysqlclient\\mysqlclient-2.3.0.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "asgiref",
+      "version": "3.12.1",
+      "license": "BSD-3-Clause",
+      "project_urls": [
+        "Documentation, https://asgi.readthedocs.io/",
+        "Further Documentation, https://docs.djangoproject.com/en/stable/topics/async/#async-adapter-functions",
+        "Changelog, https://github.com/django/asgiref/blob/master/CHANGELOG.txt"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\asgiref\\asgiref-3.12.1.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "sqlparse",
+      "version": "0.6.0",
+      "license": null,
+      "project_urls": [
+        "Home, https://github.com/andialbrecht/sqlparse",
+        "Documentation, https://sqlparse.readthedocs.io/",
+        "Release Notes, https://sqlparse.readthedocs.io/en/latest/changes.html",
+        "Source, https://github.com/andialbrecht/sqlparse",
+        "Tracker, https://github.com/andialbrecht/sqlparse/issues"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\sqlparse\\sqlparse-0.6.0.dist-info\\licenses\\AUTHORS",
+        "materials\\desktop-licenses\\sqlparse\\sqlparse-0.6.0.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "tzdata",
+      "version": "2026.4",
+      "license": "Apache-2.0",
+      "project_urls": [
+        "Bug Reports, https://github.com/python/tzdata/issues",
+        "Source, https://github.com/python/tzdata",
+        "Documentation, https://tzdata.python.org"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\tzdata\\tzdata-2026.4.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\tzdata\\tzdata-2026.4.dist-info\\licenses\\licenses\\LICENSE_APACHE"
+      ]
+    },
+    {
+      "name": "Pillow",
+      "version": "12.3.0",
+      "license": "MIT-CMU",
+      "project_urls": [
+        "Release notes, https://pillow.readthedocs.io/en/stable/releasenotes/index.html",
+        "Changelog, https://github.com/python-pillow/Pillow/releases",
+        "Documentation, https://pillow.readthedocs.io",
+        "Funding, https://tidelift.com/subscription/pkg/pypi-pillow?utm_source=pypi-pillow&utm_medium=pypi",
+        "Homepage, https://python-pillow.github.io",
+        "Mastodon, https://fosstodon.org/@pillow",
+        "Source, https://github.com/python-pillow/Pillow"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\Pillow\\pillow-12.3.0.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "fsrs",
+      "version": "6.3.2",
+      "license": "MIT License\n\nCopyright (c) 2022 Open Spaced Repetition\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n",
+      "project_urls": [
+        "Homepage, https://github.com/open-spaced-repetition/py-fsrs"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\fsrs\\fsrs-6.3.2.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.15.0",
+      "license": "PSF-2.0",
+      "project_urls": [
+        "Bug Tracker, https://github.com/python/typing_extensions/issues",
+        "Changes, https://github.com/python/typing_extensions/blob/main/CHANGELOG.md",
+        "Documentation, https://typing-extensions.readthedocs.io/",
+        "Home, https://github.com/python/typing_extensions",
+        "Q & A, https://github.com/python/typing/discussions",
+        "Repository, https://github.com/python/typing_extensions"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\typing_extensions\\typing_extensions-4.15.0.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "pywebview",
+      "version": "6.2.1",
+      "license": "BSD 3-Clause License\n\nCopyright (c) 2014-2017, Roman Sirokov\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this\n  list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice,\n  this list of conditions and the following disclaimer in the documentation\n  and/or other materials provided with the distribution.\n\n* Neither the name of the copyright holder nor the names of its\n  contributors may be used to endorse or promote products derived from\n  this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE\nFOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\nDAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\nSERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\nCAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\nOR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\nOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
+      "project_urls": [
+        "Homepage, https://pywebview.flowrl.com/",
+        "Repository, https://github.com/r0x0r/pywebview"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\pywebview\\pywebview-6.2.1.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "waitress",
+      "version": "3.0.2",
+      "license": "ZPL 2.1",
+      "project_urls": [
+        "Documentation, https://docs.pylonsproject.org/projects/waitress/en/latest/index.html",
+        "Changelog, https://docs.pylonsproject.org/projects/waitress/en/latest/index.html#change-history",
+        "Issue Tracker, https://github.com/Pylons/waitress/issues"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\waitress\\waitress-3.0.2.dist-info\\LICENSE.txt"
+      ]
+    },
+    {
+      "name": "whitenoise",
+      "version": "6.12.0",
+      "license": "MIT",
+      "project_urls": [
+        "Changelog, https://whitenoise.readthedocs.io/en/stable/changelog.html",
+        "Documentation, https://whitenoise.readthedocs.io/",
+        "Repository, https://github.com/evansd/whitenoise"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\whitenoise\\whitenoise-6.12.0.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "pythonnet",
+      "version": "3.2.0",
+      "license": "MIT",
+      "project_urls": [
+        "Homepage, https://pythonnet.github.io/",
+        "Sources, https://github.com/pythonnet/pythonnet"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\pythonnet\\pythonnet-3.2.0.dist-info\\licenses\\AUTHORS.md",
+        "materials\\desktop-licenses\\pythonnet\\pythonnet-3.2.0.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "clr_loader",
+      "version": "0.3.1",
+      "license": null,
+      "project_urls": [
+        "Sources, https://github.com/pythonnet/clr-loader",
+        "Documentation, https://pythonnet.github.io/clr-loader/"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\clr_loader\\clr_loader-0.3.1.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "license": "MIT-0",
+      "project_urls": [
+        "Documentation, https://cffi.readthedocs.io/",
+        "Changelog, https://cffi.readthedocs.io/en/latest/whatsnew.html",
+        "Download, https://github.com/python-cffi/cffi/releases",
+        "Contact, https://groups.google.com/forum/#!forum/python-cffi",
+        "Source Code, https://github.com/python-cffi/cffi",
+        "Issue Tracker, https://github.com/python-cffi/cffi/issues"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\cffi\\cffi-2.1.1.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "license": "BSD-3-Clause",
+      "project_urls": [
+        "Homepage, https://github.com/eliben/pycparser"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\pycparser\\pycparser-3.0.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "bottle",
+      "version": "0.13.4",
+      "license": "MIT",
+      "project_urls": [
+        "Source, https://github.com/bottlepy/bottle"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\bottle\\bottle-0.13.4.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "proxy_tools",
+      "version": "0.1.0",
+      "license": "MIT",
+      "project_urls": [
+        "Homepage, https://github.com/jtushman/proxy_tools"
+      ],
+      "copied_licenses": [
+        "materials/desktop-licenses/proxy_tools/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "pyinstaller",
+      "version": "6.22.3",
+      "license": "GPLv2-or-later with a special exception which allows to use PyInstaller to build and distribute non-free programs (including commercial ones)",
+      "project_urls": [
+        "Homepage, https://pyinstaller.org",
+        "Documentation, https://pyinstaller.org",
+        "Source Code, https://github.com/pyinstaller/pyinstaller",
+        "Release Notes, https://pyinstaller.org/en/stable/CHANGES.html"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\pyinstaller\\pyinstaller-6.22.3.dist-info\\licenses\\COPYING.txt"
+      ]
+    },
+    {
+      "name": "pyinstaller-hooks-contrib",
+      "version": "2026.8",
+      "license": null,
+      "project_urls": [],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\pyinstaller-hooks-contrib\\pyinstaller_hooks_contrib-2026.8.dist-info\\licenses\\LICENSE"
+      ]
+    },
+    {
+      "name": "altgraph",
+      "version": "0.17.5",
+      "license": "MIT",
+      "project_urls": [
+        "Documentation, https://altgraph.readthedocs.io/en/latest/",
+        "Issue tracker, https://github.com/ronaldoussoren/altgraph/issues",
+        "Repository, https://github.com/ronaldoussoren/altgraph"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\altgraph\\altgraph-0.17.5.dist-info\\LICENSE"
+      ]
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "project_urls": [
+        "Documentation, https://packaging.pypa.io/",
+        "Source, https://github.com/pypa/packaging"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\packaging\\packaging-26.3.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\packaging\\packaging-26.3.dist-info\\licenses\\LICENSE.APACHE",
+        "materials\\desktop-licenses\\packaging\\packaging-26.3.dist-info\\licenses\\LICENSE.BSD",
+        "materials\\desktop-licenses\\packaging\\packaging\\licenses\\__init__.py",
+        "materials\\desktop-licenses\\packaging\\packaging\\licenses\\__pycache__\\__init__.cpython-313.pyc",
+        "materials\\desktop-licenses\\packaging\\packaging\\licenses\\__pycache__\\_spdx.cpython-313.pyc",
+        "materials\\desktop-licenses\\packaging\\packaging\\licenses\\_spdx.py"
+      ]
+    },
+    {
+      "name": "pefile",
+      "version": "2024.8.26",
+      "license": "MIT",
+      "project_urls": [],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\pefile\\pefile-2024.8.26.dist-info\\LICENSE"
+      ]
+    },
+    {
+      "name": "pywin32-ctypes",
+      "version": "0.2.3",
+      "license": "BSD-3-Clause",
+      "project_urls": [],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\pywin32-ctypes\\pywin32_ctypes-0.2.3.dist-info\\LICENSE.txt"
+      ]
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "license": "MIT",
+      "project_urls": [
+        "Source, https://github.com/pypa/setuptools",
+        "Documentation, https://setuptools.pypa.io/",
+        "Changelog, https://setuptools.pypa.io/en/stable/history.html"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\setuptools\\setuptools-84.0.0.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\autocommand-2.2.2.dist-info\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\backports.tarfile-1.2.0.dist-info\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\importlib_metadata-8.7.1.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\jaraco.text-4.0.0.dist-info\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\jaraco_context-6.1.0.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\jaraco_functools-4.4.0.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\more_itertools-10.8.0.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\packaging-26.0.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\packaging-26.0.dist-info\\licenses\\LICENSE.APACHE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\packaging-26.0.dist-info\\licenses\\LICENSE.BSD",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\packaging\\licenses\\__init__.py",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\packaging\\licenses\\__pycache__\\__init__.cpython-313.pyc",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\packaging\\licenses\\__pycache__\\_spdx.cpython-313.pyc",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\packaging\\licenses\\_spdx.py",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\platformdirs-4.4.0.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\tomli-2.4.0.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\wheel-0.46.3.dist-info\\licenses\\LICENSE.txt",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\_vendor\\zipp-3.23.0.dist-info\\licenses\\LICENSE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\config\\NOTICE",
+        "materials\\desktop-licenses\\setuptools\\setuptools\\config\\_validate_pyproject\\NOTICE"
+      ]
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "license": "MIT",
+      "project_urls": [
+        "Changelog, https://wheel.readthedocs.io/en/stable/news.html",
+        "Documentation, https://wheel.readthedocs.io/",
+        "Issue Tracker, https://github.com/pypa/wheel/issues",
+        "Source, https://github.com/pypa/wheel"
+      ],
+      "copied_licenses": [
+        "materials\\desktop-licenses\\wheel\\wheel-0.48.0.dist-info\\licenses\\LICENSE.txt"
+      ]
+    }
+  ],
+  "downloads": []
+}

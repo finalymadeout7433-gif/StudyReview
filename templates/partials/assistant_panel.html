@@ -1,0 +1,59 @@
+{% load static %}
+<button type="button" class="mi-launcher" id="mi-launcher" aria-label="打开咪学习助手" aria-haspopup="dialog" aria-controls="mi-panel">{% if mi_avatar_available %}<img src="{% static 'img/mi-avatar.png' %}" alt="咪">{% else %}<span class="mi-placeholder">咪</span>{% endif %}<span class="mi-launcher-label">学习助手</span></button>
+<dialog id="mi-panel" class="mi-panel" aria-labelledby="mi-heading">
+  <header class="mi-header"><div><span class="eyebrow">拾习 / ASSISTANT</span><h2 id="mi-heading">咪 · 学习助手</h2></div><button type="button" class="text-button mi-close" data-mi-close>关闭 ×</button></header>
+  <div class="mi-state-line"><span class="badge" id="mi-provider-state">AI 未连接</span><span>会话保存在本机</span></div>
+  <nav class="mi-pane-nav" aria-label="助手功能"><button type="button" data-mi-pane="chat" aria-pressed="true">对话</button><button type="button" data-mi-pane="drafts" aria-pressed="false">整理草稿</button><button type="button" data-mi-pane="config" aria-pressed="false">连接设置</button></nav>
+  <p class="mi-feedback" id="mi-feedback" role="status"></p>
+  <section id="mi-chat" class="mi-pane">
+    <p class="mi-local-note" id="mi-offline-note">AI 尚未连接，当前只在本机保存文字和图片。可在<button type="button" class="text-button" data-mi-pane="config">连接设置</button>填写自己的密钥和预算，也可在“错题草稿”中手动整理。</p>
+    <div class="mi-session-tools"><label for="mi-session">当前会话</label><select id="mi-session" aria-label="切换会话"></select><button type="button" class="text-button" id="mi-new-session">新会话 ＋</button></div>
+    <button type="button" class="text-button" id="mi-more-sessions" hidden>更多会话</button>
+    <button type="button" class="text-button" id="mi-older-messages" hidden>加载更早的消息</button>
+    <ol id="mi-message-log" class="mi-message-log" aria-label="会话记录" aria-live="polite"></ol>
+    <form id="mi-composer" class="mi-composer">{% csrf_token %}
+      <label for="mi-action">这次想做什么</label><select id="mi-action"><option value="auto">对话 / 自动提示修改对象</option><option value="chat">只回答问题</option><option value="task">编辑任务</option><option value="task_note">整理任务说明 / 笔记</option><option value="question">编辑错题</option><option value="create_question">从文字或图片整理新错题</option></select>
+      <label for="mi-text">你的问题或修改要求</label><textarea id="mi-text" rows="3" maxlength="16000" placeholder="例如：把这个任务推迟到明天，并把说明整理成三步。不用复制到其他表单。"></textarea>
+      <div data-image-editor="chat" class="mi-image-editor"><input type="file" accept="image/png,image/jpeg,image/webp" multiple data-image-input hidden><div class="mi-composer-actions"><button type="button" class="text-button" data-image-choose>附上图片 ＋</button><span class="help-text">可粘贴或拖放截图</span></div><div data-image-drop class="mi-drop-target"><div data-image-list class="image-edit-list"></div></div><p data-image-status class="image-upload-status" role="status"></p></div>
+      <div class="mi-context-choice"><label><input type="checkbox" id="mi-use-selected-context">发送时包含我选中的历史消息</label><p class="help-text">本机历史长期保存；AI 只接收本次主动提交及明确选中的上下文。</p></div>
+      <details class="mi-target-tools" id="mi-target-tools"><summary>选择要操作的对象</summary>
+<label for="mi-ai-course">新增错题所属课程（主动选择后才发送）</label><select id="mi-ai-course"><option value="">不发送课程信息</option></select>
+<div class="mi-target-fields"><select id="mi-target-kind" aria-label="目标类型"><option value="task">任务</option><option value="question">错题</option></select><input type="search" id="mi-target-query" maxlength="180" placeholder="任务、错题或课程名称" aria-label="按名称查找对象"><button type="button" class="text-button" id="mi-search-target">查找对象</button><button type="button" class="text-button" id="mi-current-target" hidden>选择当前对象</button><button type="button" class="text-button" id="mi-clear-target">清除选择</button></div>
+<p class="help-text">候选只在本机查找。点击确定一个对象后，生成预览时才发送该对象的选定范围；同名对象请按课程和日期区分。</p><div id="mi-target-candidates" aria-label="本机对象候选"></div><button type="button" class="text-button" id="mi-more-targets" hidden>更多候选</button>
+<details><summary>按编号选择（可选）</summary><input type="number" id="mi-target-id" min="1" placeholder="编号" aria-label="目标编号"><button type="button" class="text-button" id="mi-load-target">选择编号对象</button></details>
+<p id="mi-target-preview" class="mi-target-preview">尚未选择修改对象。可按名称查找，或从任务 / 错题页面直接选择。</p>
+</details>
+<button type="submit" class="button primary wide" id="mi-send">保存问题</button>
+    </form>
+  </section>
+  <section id="mi-drafts" class="mi-pane" hidden>
+    <p class="mi-local-note">任务、笔记或错题建议会直接生成预览，无需复制到下方表单。先核对对象及字段变化，再确认保存；保存后刷新本页并恢复会话。取消不会修改学习内容。若主页面有未保存的表单输入，请先处理。</p>
+    <details class="mi-draft-editor"><summary>手动整理一道错题</summary><form id="mi-draft-form" class="stack-form">{% csrf_token %}
+      <label>所属课程<select name="course_id" required id="mi-draft-course"></select></label>
+      <label>标题<input name="title" maxlength="180" required></label>
+      <label>题干<textarea name="content" rows="3" maxlength="20000" required></textarea></label>
+      <label>原答<textarea name="original_answer" rows="2" maxlength="20000" required placeholder="没有作答时填写“未作答”"></textarea></label>
+      <label>参考答案<textarea name="correct_answer" rows="3" maxlength="20000" required></textarea></label>
+      <label>错因<textarea name="error_reason" rows="2" maxlength="20000" required></textarea></label>
+      <label>知识点<select id="mi-draft-points" multiple aria-label="可选知识点"></select></label>
+      <label>首次复习日期<input name="next_review_date" type="date" required></label>
+      <label><input type="checkbox" id="mi-draft-include-images">附上对话输入框中已选的图片</label>
+      <button type="submit" class="button secondary">生成待确认草稿</button>
+    </form></details>
+    <div id="mi-draft-list" class="mi-draft-list"></div>
+    <button type="button" class="text-button" id="mi-more-drafts" hidden>读取更早草稿</button>
+  </section>
+  <section id="mi-config" class="mi-pane" hidden>
+    <p class="mi-local-note">连接目标：DeepSeek 官方服务。配置完成后，主动发送的问题、图片及选定上下文会发送到 api.deepseek.com；其他课程和记录不会自动发送。</p>
+    <form id="mi-config-form" class="stack-form">{% csrf_token %}
+      <label>API 密钥<input name="api_key" type="password" autocomplete="off" maxlength="512" required placeholder="由你手动填写，不显示已保存密钥"></label>
+      <label>累计使用上限（人民币元）<input name="budget_cny" type="number" min="0.01" max="1000" step="0.01" required placeholder="填写明确的总额度"></label>
+      <label><input type="checkbox" name="confirm_local_storage" required>我确认将密钥加密保存在本机。</label>
+      <label><input type="checkbox" name="confirm_budget" required>我授权在上述累计额度内调用，额度不足时停止。</label>
+      <label><input type="checkbox" name="confirm_destination" required>我确认主动提交的内容发送到 DeepSeek 官方服务。</label>
+      <button type="submit" class="button primary">确认保存与启用</button>
+    </form><p class="help-text">界面不保存明文密钥。费用显示为保守估算；不确定的调用保留额度，不自动重试。</p>
+    <p id="mi-budget-summary" class="mi-budget-summary"></p><button type="button" class="text-button" id="mi-disable-provider">停用 AI 连接</button>
+  </section>
+</dialog>
+<dialog id="learning-image-viewer" class="learning-image-viewer" aria-labelledby="image-viewer-heading"><header><h2 id="image-viewer-heading">学习图片</h2><button type="button" class="text-button" data-image-close>关闭 ×</button></header><div class="image-viewer-body"><img alt="" id="learning-image-full"></div><p>图片仅在当前账户内可读。可滚动查看原图。</p></dialog>

@@ -1,0 +1,57 @@
+name: Source and MySQL checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  mysql-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      mysql:
+        image: mysql:8.4.11
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.9'
+          cache: pip
+      - name: Install build prerequisites and pinned Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y default-libmysqlclient-dev build-essential pkg-config
+          python -m pip install -r requirements.txt
+      - name: Check source publication boundaries
+        run: python scripts/verify_public_tree.py
+      - name: Create temporary isolated schemas
+        run: |
+          mkdir -p "$RUNNER_TEMP/study-config"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'study-config' / 'database-credentials.json'
+          path.write_text(json.dumps({'host':'127.0.0.1','port':3306,'database':'study_review_dev','application_user':'unused_ci_application','application_password':'unused_ci_placeholder','administrator_user':'root','administrator_password':''}), encoding='utf-8')
+          PY
+          python scripts/prepare_development.py --data-dir "$RUNNER_TEMP/study-data" --credentials-file "$RUNNER_TEMP/study-config/database-credentials.json" --confirm-create-isolated-schemas
+          echo "STUDY_DATA_DIR=$RUNNER_TEMP/study-data" >> "$GITHUB_ENV"
+          echo "STUDY_ALLOW_SCHEMA_ADMIN=1" >> "$GITHUB_ENV"
+      - name: Apply migrations and run integration tests
+        run: |
+          python manage.py migrate --settings=config.v2_development_settings --noinput
+          python manage.py test learning attachments assistant ai_gateway scheduling --settings=config.v2_integrated_test_settings --keepdb --noinput
+          python manage.py makemigrations --check --dry-run --settings=config.v2_development_settings

@@ -1,0 +1,10 @@
+.mi-target-choice{display:block;width:100%;text-align:left;padding:.65rem;margin:.35rem 0;white-space:normal;overflow-wrap:anywhere;border:1px solid #c7c0b8}
+.mi-target-fields{flex-wrap:wrap}
+.mi-target-fields input[type=search]{min-width:0;flex:1 1 10rem}
+#mi-target-candidates{max-height:15rem;overflow:auto}
+.mi-draft-target{font-weight:600;overflow-wrap:anywhere}
+.mi-change-table{width:100%;min-width:0;table-layout:fixed;border-collapse:collapse;font-size:.8rem;margin:.8rem 0}
+.mi-change-table th,.mi-change-table td{border:1px solid #c7c0b8;padding:.5rem;vertical-align:top;text-align:left;overflow-wrap:anywhere;white-space:pre-wrap}
+.mi-change-table th:first-child{width:22%}
+.mi-change-table th{background:#ede9e4}
+.mi-draft-card>.button{margin:.35rem .35rem .35rem 0}

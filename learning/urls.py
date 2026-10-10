@@ -1,0 +1,31 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('accounts/login/', views.StudyLoginView.as_view(), name='login'),
+    path('accounts/logout/', views.StudyLogoutView.as_view(), name='logout'),
+    path('accounts/register/', views.register, name='register'),
+    path('', views.dashboard, name='dashboard'),
+    path('courses/', views.course_list, name='course-list'),
+    path('courses/new/', views.course_edit, name='course-create'),
+    path('courses/<int:pk>/', views.course_detail, name='course-detail'),
+    path('courses/<int:pk>/edit/', views.course_edit, name='course-edit'),
+    path('courses/<int:pk>/archive/', views.course_archive, name='course-archive'),
+    path('courses/<int:course_pk>/points/new/', views.point_edit, name='point-create'),
+    path('courses/<int:course_pk>/points/<int:pk>/edit/', views.point_edit, name='point-edit'),
+    path('courses/<int:course_pk>/points/<int:pk>/delete/', views.point_delete, name='point-delete'),
+    path('courses/<int:course_pk>/points.json', views.point_choices, name='point-choices'),
+    path('tasks/', views.task_list, name='task-list'),
+    path('tasks/new/', views.task_edit, name='task-create'),
+    path('tasks/<int:pk>/edit/', views.task_edit, name='task-edit'),
+    path('tasks/<int:pk>/status/', views.task_status, name='task-status'),
+    path('tasks/<int:pk>/delete/', views.task_delete, name='task-delete'),
+    path('questions/', views.question_list, name='question-list'),
+    path('questions/new/', views.question_edit, name='question-create'),
+    path('questions/<int:pk>/', views.question_detail, name='question-detail'),
+    path('questions/<int:pk>/edit/', views.question_edit, name='question-edit'),
+    path('questions/<int:pk>/archive/', views.question_archive, name='question-archive'),
+    path('reviews/', views.review_queue, name='review-queue'),
+    path('reviews/<int:pk>/', views.review_question, name='review-question'),
+    path('statistics/', views.statistics, name='statistics'),
+]
