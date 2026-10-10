@@ -2,7 +2,7 @@
 
 数据库课程项目：把课程、任务、错题、复习历史和统计连起来，提供 Windows 独立窗口及本地学习助手。
 
-当前公开发行：v2.0.0-rc7-collab.1。业务以已验收 rc7 为基线，新增通用发行入口、新电脑空库初始化和协作说明；原本机程序及用户数据未修改。
+当前公开发行：v2.0.0-rc7-collab.2。业务以已验收 rc7 为基线，新增通用发行入口、新电脑空库初始化和协作说明；原本机程序及用户数据未修改。
 
 **下载软件：[GitHub Releases](https://github.com/finalymadeout7433-gif/StudyReview/releases/latest)。Windows ZIP 内含 Python 应用运行时，仍需本机 MySQL 8.4、WebView2、兼容 .NET Framework/VC++；不是无需环境的解压即用。** 按 [Windows 首次启动](docs/01-Windows首次启动.md) 从下载完成配置。
 

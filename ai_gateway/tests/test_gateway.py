@@ -1,8 +1,11 @@
 import json
+import sys
 from pathlib import Path
 import tempfile
 import uuid
 from decimal import Decimal
+from types import SimpleNamespace
+from unittest import skipUnless
 from unittest.mock import patch
 from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier
@@ -55,6 +58,7 @@ class ConfigTests(TestCase):
                 self.assertNotIn(SYNTHETIC_KEY, response.content.decode())
         self.assertEqual(Account.objects.count(), 0)
 
+    @skipUnless(sys.platform == 'win32', 'Requires real Windows current-user DPAPI.')
     def test_actual_windows_dpapi_synthetic_key_status_never_returns_key(self):
         response = self.post(self.data())
         self.assertEqual(response.status_code, 200)
@@ -73,7 +77,10 @@ class ConfigTests(TestCase):
             self.assertTrue(services.gateway_provider(self.user, uuid.uuid4()).connected)
 
     def test_disable_keeps_budget_and_history_and_owner_isolation(self):
-        self.assertEqual(self.post(self.data()).status_code, 200)
+        # Budget/owner behavior is independent of OS cryptography; genuine DPAPI
+        # and the unsupported-platform refusal are verified separately.
+        with patch('ai_gateway.key_store.encrypt_api_key', return_value='test-only-opaque-protection'):
+            self.assertEqual(self.post(self.data()).status_code, 200)
         account = Account.objects.get(owner=self.user)
         reference = account.key_reference
         disabled = self.client.delete(self.url).json()
@@ -96,18 +103,33 @@ class ConfigTests(TestCase):
         self.assertFalse(Account.objects.exists())
 
     def test_file_failure_and_late_db_failure_clean_only_new_ciphertext(self):
-        with patch('ai_gateway.key_store.os.fsync', side_effect=OSError('synthetic failure')):
+        with patch('ai_gateway.key_store.encrypt_api_key', return_value='test-only-opaque-protection'), \
+                patch('ai_gateway.key_store.os.fsync', side_effect=OSError('synthetic failure')) as sync:
             self.assertEqual(self.post(self.data()).status_code, 400)
+            sync.assert_called_once()
         self.assertFalse(Account.objects.exists())
         self.assertFalse(list(self.temp_path.rglob('*.dpapi')))
         account = Account.objects.create(owner=self.user)
-        with patch('ai_gateway.services.Account.save', side_effect=RuntimeError('synthetic database failure')):
+        with patch('ai_gateway.key_store.encrypt_api_key', return_value='test-only-opaque-protection'), \
+                patch('ai_gateway.services.Account.save', side_effect=RuntimeError('synthetic database failure')) as save:
             response = self.post(self.data())
+            save.assert_called_once()
         self.assertEqual(response.status_code, 400)
         self.assertFalse(list(self.temp_path.rglob('*.dpapi')))
         account.refresh_from_db()
         self.assertFalse(account.enabled)
         self.assertIsNone(account.key_reference)
+        self.assertNotIn(SYNTHETIC_KEY, response.content.decode())
+
+    def test_non_windows_refuses_key_without_plaintext_file_or_account(self):
+        # Replace this module's sys binding, never the process-wide platform.
+        with patch('assistant.provider_security.sys', SimpleNamespace(platform='linux')):
+            response = self.post(self.data())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['error'], 'key_storage_failed')
+        self.assertFalse(Account.objects.exists())
+        self.assertFalse(list(self.temp_path.rglob('*.dpapi')))
+        self.assertFalse(list(self.temp_path.rglob('*.*')))
         self.assertNotIn(SYNTHETIC_KEY, response.content.decode())
 
     def test_budget_cannot_drop_below_spent_plus_unknown_hold(self):
@@ -123,6 +145,7 @@ class ConfigTests(TestCase):
             self.assertFalse((self.temp_path / 'user-data').exists())
             self.assertFalse((self.temp_path / 'program').exists())
 
+    @skipUnless(sys.platform == 'win32', 'Requires real Windows current-user DPAPI.')
     def test_separated_data_saves_dpapi_with_readonly_program_directory(self):
         program = self.temp_path / 'readonly-program'
         program.mkdir()

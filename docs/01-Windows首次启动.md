@@ -4,7 +4,7 @@
 
 ## 下载与校验
 
-从 https://github.com/finalymadeout7433-gif/StudyReview/releases/latest 下载 StudyReview-Windows-x64-v2.0.0-rc7-collab.1.zip 和 SHA256SUMS.txt。完整解压，例如 C:\Apps\StudyReview，保留 Windows程序及所有 _internal 文件，不能只复制 EXE。
+从 https://github.com/finalymadeout7433-gif/StudyReview/releases/latest 下载 StudyReview-Windows-x64-v2.0.0-rc7-collab.2.zip 和 SHA256SUMS.txt。完整解压，例如 C:\Apps\StudyReview，保留 Windows程序及所有 _internal 文件，不能只复制 EXE。
 
     Get-FileHash -Algorithm SHA256 '下载 ZIP 的完整路径'
 
