@@ -126,6 +126,7 @@ class ReviewRecord(models.Model):
     review_date = models.DateField('本次复习日期')
     answer = models.TextField('本次作答', max_length=20000, validators=[MaxLengthValidator(20000)])
     rating = models.CharField('自评', max_length=5, choices=Rating.choices)
+    is_example = models.BooleanField('示例演练记录', default=False)
     note = models.TextField('备注', blank=True, max_length=5000, validators=[MaxLengthValidator(5000)])
     next_review_date = models.DateField('当次安排的下次日期')
     title_snapshot = models.CharField(max_length=180)

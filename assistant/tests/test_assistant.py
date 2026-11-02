@@ -98,6 +98,29 @@ class AssistantTests(TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.json()['error'], 'authentication_required')
 
+    def test_first_message_names_default_conversation_and_replay_keeps_title(self):
+        session,_=services.create_session(self.user,'新会话',uuid.uuid4())
+        key=uuid.uuid4()
+        first,_,created=services.append_message(self.user,session.pk,'数据库\n事务如何回滚？',[],key)
+        session.refresh_from_db()
+        self.assertTrue(created)
+        self.assertEqual(session.title,'数据库 事务如何回滚？')
+        session.title='我的数据库答疑';session.save(update_fields=['title'])
+        replay,_,created=services.append_message(self.user,session.pk,'数据库\n事务如何回滚？',[],key)
+        session.refresh_from_db()
+        self.assertFalse(created)
+        self.assertEqual(first.pk,replay.pk)
+        self.assertEqual(session.title,'我的数据库答疑')
+        services.append_message(self.user,session.pk,'下一个问题',[],uuid.uuid4())
+        session.refresh_from_db()
+        self.assertEqual(session.title,'我的数据库答疑')
+
+    def test_first_image_names_default_conversation(self):
+        session,_=services.create_session(self.user,'新对话',uuid.uuid4())
+        services.append_message(self.user,session.pk,'',[str(self.image.pk)],uuid.uuid4())
+        session.refresh_from_db()
+        self.assertEqual(session.title,'图片提问')
+
     def test_ownership_every_read_write_and_key_collision(self):
         other_session, _ = services.create_session(self.other, '其他会话', uuid.uuid4())
         endpoints = [('get', reverse('assistant:session', args=[other_session.pk]), None),

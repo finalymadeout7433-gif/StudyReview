@@ -90,7 +90,7 @@ class Command(BaseCommand):
             date = today + timedelta(days=offset)
             stamp = datetime.combine(date, time(19, 30), tzinfo=ZoneInfo('Asia/Shanghai'))
             ReviewRecord.objects.create(question=question, reviewed_at=stamp, review_date=date, answer=answer, rating=rating,
-                note='合成演示历史；不是实际学习记录。', next_review_date=date + timedelta(days={'again': 1, 'hard': 3, 'good': 7}[rating]),
+                note='合成演示历史；不是实际学习记录。', is_example=True, next_review_date=date + timedelta(days={'again': 1, 'hard': 3, 'good': 7}[rating]),
                 title_snapshot=question.title, question_snapshot=question.content, original_answer_snapshot=question.original_answer,
                 correct_answer_snapshot=question.correct_answer, error_reason_snapshot=question.error_reason,
                 course_snapshot=question.course.name, knowledge_points_snapshot=list(question.knowledge_points.values_list('name', flat=True)),

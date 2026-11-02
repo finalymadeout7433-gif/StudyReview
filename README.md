@@ -2,7 +2,7 @@
 
 数据库课程项目：把课程、任务、错题、复习历史和统计连起来，提供 Windows 独立窗口及本地学习助手。
 
-当前公开发行：v2.0.0-rc7-collab.2。业务以已验收 rc7 为基线，新增通用发行入口、新电脑空库初始化和协作说明；原本机程序及用户数据未修改。
+本次更新：v2.1.0，2026-11-02。新增简洁界面、十个统计模块、七门课程内容模板、聊天式学习助手与截图粘贴，修复普通图片答疑返回格式及开发预览异常退出恢复。此版本的运行包需由仓库维护者上传至 Release；下方 latest 链接可能仍指向旧版。
 
 **下载软件：[GitHub Releases](https://github.com/finalymadeout7433-gif/StudyReview/releases/latest)。Windows ZIP 内含 Python 应用运行时，仍需本机 MySQL 8.4、WebView2、兼容 .NET Framework/VC++；不是无需环境的解压即用。** 按 [Windows 首次启动](docs/01-Windows首次启动.md) 从下载完成配置。
 
@@ -40,10 +40,13 @@
 | [10 工具与版权](docs/10-工具依赖与版权.md) | 每个工具/依赖的作用、版本与许可证 |
 | [11 接口导航](docs/11-接口与代码导航.md) | 页面/API 和主要实现定位 |
 | [12 发行验收](docs/12-发行验收记录.md) | 本轮实际结果、哈希及未覆盖项目 |
+| [13 本机开发与协作](docs/13-local-development.md) | 源码预览、停止、检查、测试与分支协作 |
+| [14 界面与统计图表](docs/14-interface-and-charts.md) | 本分支的布局优化、六类真实数据图表及修改位置 |
+| [15 课程示例与记忆分析](docs/15-learning-examples-and-memory.md) | 十个统计模块、示例来源、遗忘示意、FSRS预测及实例关联图 |
 
 ## 技术栈与代码
 
-Python 3.13.9、Django 5.2.17、mysqlclient 2.3.0、MySQL 8.4；Django 模板与本地 CSS/JS；Pillow 12.3.0、FSRS 6.3.2；Waitress 3.0.2、WhiteNoise 6.12.0、pywebview 6.2.1、pythonnet 3.2.0、WinForms/WebView2。没有 React 双栈或 GPU/训练依赖。
+Python 3.13.x（本次构建为3.13.5）、Django 5.2.17、mysqlclient 2.3.0、MySQL 8.4；Django 模板与本地 CSS/JS；Pillow 12.3.0、FSRS 6.3.2；Waitress 3.0.2、WhiteNoise 6.12.0、pywebview 6.2.1、pythonnet 3.2.0、WinForms/WebView2。没有 React 双栈或 GPU/训练依赖。
 
 learning、attachments、assistant、scheduling、ai_gateway 分别负责基础学习、图片、草稿/会话、调度、AI预算；desktop 是窗口和本机服务；config 是环境与迁移授权；templates/static 是离线界面。
 

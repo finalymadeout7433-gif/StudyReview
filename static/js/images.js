@@ -31,8 +31,8 @@
       this.payload = this.form?.querySelector('[name=image_payload]');
       element.querySelector('[data-image-choose]')?.addEventListener('click', () => this.input.click());
       this.input.addEventListener('change', () => { this.add(this.input.files); this.input.value = ''; });
-      const drop = element.querySelector('[data-image-drop]');
-      drop.addEventListener('dragover', event => { event.preventDefault(); drop.classList.add('is-dragging'); });
+      const drop = this.mode==='chat'?element:element.querySelector('[data-image-drop]');
+      drop.addEventListener('dragover', event => { if([...event.dataTransfer.types].includes('Files')){event.preventDefault(); drop.classList.add('is-dragging');} });
       drop.addEventListener('dragleave', () => drop.classList.remove('is-dragging'));
       drop.addEventListener('drop', event => { event.preventDefault(); drop.classList.remove('is-dragging'); this.add(event.dataTransfer.files); });
       this.form?.addEventListener('paste', event => {
@@ -62,7 +62,7 @@
           if (!response.ok) throw new Error(typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail || data.error || '图片保存失败。'));
           if (!safeMedia(data.url) || !safeMedia(data.thumbnail_url)) throw new Error('图片响应格式不正确。');
           if (!this.items.some(item => item.id === data.id)) this.items.push({...data,role:'question'});
-          this.status.textContent = `已保存 ${this.items.length} 张图片。`; this.render();
+          this.status.textContent = this.mode==='chat'?'':`已保存 ${this.items.length} 张图片。`; this.render();
         } catch (error) { this.status.textContent = error.message || '上传失败，请再次选择图片重试。'; }
         finally { this.pending--; }
       }
@@ -82,8 +82,8 @@
             move.addEventListener('click', () => { [this.items[index-1],this.items[index]]=[this.items[index],this.items[index-1]]; this.render(); }); card.append(move);
           }
         }
-        const remove=document.createElement('button'); remove.type='button'; remove.className='text-button'; remove.textContent='移除';
-        remove.addEventListener('click', () => { this.items.splice(index,1); this.render(); this.status.textContent='已从本次内容移除；已保存的历史图片继续保留。'; }); card.append(remove); this.list.append(card);
+        const remove=document.createElement('button'); remove.type='button'; remove.className='text-button'; remove.textContent=this.mode==='chat'?'×':'移除';remove.setAttribute('aria-label','移除'+name.textContent);
+        remove.addEventListener('click', () => { this.items.splice(index,1); this.render(); this.status.textContent=''; }); card.append(remove); this.list.append(card);
       }); this.sync();
     }
     sync() { if (this.payload) this.payload.value=JSON.stringify(this.items.map(item => ({id:item.id,role:item.role || 'question'}))); }

@@ -7,7 +7,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -133,6 +133,9 @@ def dashboard(request):
 @login_required
 def course_list(request):
     courses, selected = archive_filter(request, Course.objects.filter(owner=request.user))
+    courses = courses.annotate(point_count=Count('knowledge_points', distinct=True),
+        task_count=Count('tasks', distinct=True),
+        question_count=Count('questions', filter=Q(questions__is_archived=False), distinct=True))
     return render(request, 'learning/course_list.html', {'page_obj': page(request, courses),
         'archive': selected, 'section': 'courses', 'title': '课程与知识点'})
 
@@ -435,12 +438,19 @@ def statistics(request):
     data = request.GET if request.GET else {'start': today - timedelta(days=6), 'end': today}
     form = StatisticsForm(data, user=request.user)
     stats = None
+    analytics = None
     if form.is_valid():
         selected = form.cleaned_data['course']
+        review_source = form.cleaned_data.get('review_source') or 'all'
         stats = services.summary(request.user, selected.pk if selected else None,
-            form.cleaned_data['start'], form.cleaned_data['end'])
+            form.cleaned_data['start'], form.cleaned_data['end'], review_source=review_source)
+        from .analytics import learning_analytics
+        analytics = learning_analytics(request.user, selected.pk if selected else None,
+            form.cleaned_data['start'], form.cleaned_data['end'], review_source=review_source)
     return render(request, 'learning/statistics.html', {'form': form, 'stats': stats,
-        'section': 'statistics', 'title': '学习统计'})
+        'analytics': analytics, 'section': 'statistics', 'title': '学习统计',
+        'statistics_ranges': [{'label': label, 'start': (today-timedelta(days=days-1)).isoformat(),
+            'end': today.isoformat()} for days, label in [(7, '近7天'), (30, '近30天'), (84, '近12周')]]})
 
 
 def not_found(request, exception=None):

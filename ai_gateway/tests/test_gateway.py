@@ -225,6 +225,26 @@ class GatewayLedgerTests(TransactionTestCase):
     def context(self):
         return ChatContext('Untrusted data only.', ({'role': 'user', 'text': '合成问题'},), (), 1, 0)
 
+    def test_gateway_uses_text_for_questions_and_json_for_explicit_content_scope(self):
+        from dataclasses import replace
+        for structured in (False,True):
+            with self.subTest(structured=structured):
+                context=self.context()
+                if structured:
+                    context=replace(context,selected_course_snapshot={'id':1,'name':'合成课程','knowledge_points':[],'local_date':'2026-10-28'})
+                calls=[]
+                class SyntheticTransport:
+                    def send(inner,payload,api_key,timeout):
+                        sent=json.loads(payload);calls.append(sent)
+                        content=json.dumps({'text':'合成答疑','drafts':[]}) if structured else '**合成答疑**：主键用于唯一标识记录。'
+                        return json.dumps({'usage':{'prompt_tokens':100,'completion_tokens':25},
+                            'choices':[{'finish_reason':'stop','message':{'role':'assistant','content':content}}]}).encode()
+                with patch('ai_gateway.key_store.read_configured',return_value=SYNTHETIC_KEY):
+                    result=services.GatewayProvider(self.user,uuid.uuid4(),transport=SyntheticTransport()).respond(context)
+                self.assertEqual(calls[0]['response_format'],{'type':'json_object' if structured else 'text'})
+                self.assertEqual(result.drafts,())
+                self.assertIn('合成答疑',result.text)
+
     def test_reserve_commit_dispatch_commit_settle_once_and_peak_estimate(self):
         quote = self.quote()
         reservation = self.reserve(quote)
