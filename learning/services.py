@@ -238,7 +238,7 @@ def archive_question(user, pk, archived):
 
 
 @transaction.atomic
-def submit_review(user, question_id, values, token):
+def submit_review(user, question_id, values, token, *, is_example=False):
     payload = read_token(token, user, 'review', question_id, revealed=True)
     try:
         course_id = WrongQuestion.objects.filter(course__owner=user).values_list('course_id', flat=True).get(pk=question_id)
@@ -273,7 +273,7 @@ def submit_review(user, question_id, values, token):
     if next_date <= today:
         raise ValidationError({'next_review_date': '下次复习必须晚于今天。'})
     record = ReviewRecord(
-        question=question, reviewed_at=reviewed_at, review_date=today, answer=answer, rating=rating,
+        question=question, reviewed_at=reviewed_at, review_date=today, answer=answer, rating=rating, is_example=is_example,
         note=values.get('note', '').strip(), next_review_date=next_date,
         title_snapshot=question.title, question_snapshot=question.content,
         original_answer_snapshot=question.original_answer, correct_answer_snapshot=question.correct_answer,
@@ -307,7 +307,7 @@ def date_interval(start, end):
     return begin, finish
 
 
-def summary(user, course_id=None, start=None, end=None):
+def summary(user, course_id=None, start=None, end=None, review_source='all'):
     today = timezone.localdate()
     start, end = start or today - timedelta(days=6), end or today
     courses = Course.objects.filter(owner=user, is_archived=False)
@@ -317,6 +317,8 @@ def summary(user, course_id=None, start=None, end=None):
     questions = WrongQuestion.objects.filter(course__in=courses, is_archived=False)
     begin, finish = date_interval(start, end)
     reviews = ReviewRecord.objects.filter(question__in=questions, reviewed_at__gte=begin, reviewed_at__lt=finish)
+    if review_source in ('personal', 'example'):
+        reviews = reviews.filter(is_example=review_source == 'example')
     counts = tasks.aggregate(total=Count('pk'), done=Count('pk', filter=Q(status=Task.Status.DONE)),
         overdue=Count('pk', filter=Q(status=Task.Status.TODO, due_date__lt=today)))
     rating_counts = dict(reviews.values('rating').annotate(total=Count('pk')).values_list('rating', 'total'))
@@ -328,7 +330,8 @@ def summary(user, course_id=None, start=None, end=None):
         'tasks_pending': counts['total'] - counts['done'], 'overdue': counts['overdue'],
         'completion_rate': round(counts['done'] / counts['total'] * 100, 1) if counts['total'] else None,
         'questions_count': questions.count(), 'due_count': questions.filter(next_review_date__lte=today).count(),
-        'review_total': review_total, 'ratings': ratings, 'start': start, 'end': end,
+        'review_total': review_total, 'example_review_total': reviews.filter(is_example=True).count(),
+        'ratings': ratings, 'start': start, 'end': end,
         'course_rows': courses.annotate(task_total=Count('tasks', distinct=True),
             task_done=Count('tasks', filter=Q(tasks__status='done'), distinct=True),
             question_total=Count('questions', filter=Q(questions__is_archived=False), distinct=True))}

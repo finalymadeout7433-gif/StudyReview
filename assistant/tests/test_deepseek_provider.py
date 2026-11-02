@@ -198,6 +198,45 @@ class ProviderTests(unittest.TestCase):
         self.assertEqual(base64.b64decode(url.split(',', 1)[1]), PNG)
         self.assertEqual(last['content'][1]['image_url']['detail'], 'original')
 
+    def test_plain_image_answer_uses_text_mode_without_edit_envelope(self):
+        request=replace(self.request,images=(PreparedImage(PNG,width=1,height=1),),structured_output=False)
+        raw=json.loads(good_response())
+        answer='## 学习情况\n\n- 数据库课程已完成一项任务。\n- 可以先复习主键与外键。'
+        raw['choices'][0]['message']['content']=answer
+        self.provider.transport=FakeTransport(json.dumps(raw,ensure_ascii=False).encode())
+        result=self.complete(request)
+        self.assertEqual(result.result.text,answer)
+        self.assertEqual(result.result.drafts,())
+        sent=json.loads(self.provider.transport.calls[0][0])
+        self.assertEqual(sent['response_format'],{'type':'text'})
+        self.assertNotIn('Draft contract:',sent['messages'][0]['content'])
+        self.assertTrue(sent['messages'][-1]['content'][1]['image_url']['url'].startswith('data:image/png;base64,'))
+
+    def test_plain_reply_cannot_turn_model_json_into_record_changes(self):
+        request=replace(self.request,structured_output=False)
+        raw=json.loads(good_response(drafts=[{'operation':'update_task','payload':{'title':'不应写入'}}]))
+        self.provider.transport=FakeTransport(json.dumps(raw).encode())
+        result=self.complete(request)
+        self.assertEqual(result.result.text,raw['choices'][0]['message']['content'])
+        self.assertEqual(result.result.drafts,())
+
+    def test_selected_target_cannot_disable_structured_preview(self):
+        target={'kind':'task','id':42,'fields':{'id':42,'course_id':3,'title':'合成任务'}}
+        with self.assertRaises(ProviderError) as error:
+            prepare_request(replace(self.request,selected_target_snapshot=target,structured_output=False))
+        self.assertEqual(error.exception.code,'invalid_request')
+
+    def test_plain_reply_still_rejects_empty_truncated_and_tool_outputs(self):
+        request=replace(self.request,structured_output=False)
+        for content,finish,tools in [('', 'stop',None),('  ','stop',None),('截断内容','length',None),('调用工具','stop',[{}])]:
+            with self.subTest(finish=finish,empty=not content.strip()):
+                raw=json.loads(good_response(finish_reason=finish))
+                raw['choices'][0]['message']['content']=content
+                if tools:raw['choices'][0]['message']['tool_calls']=tools
+                self.provider.transport=FakeTransport(json.dumps(raw).encode())
+                with self.assertRaises(ProviderError) as error:self.complete(request)
+                self.assertEqual(error.exception.code,'unusable_answer')
+
     def test_image_spoof_invalid_size_and_path_not_accepted(self):
         bad_images = (PreparedImage(b'<svg><script>alert(1)</script></svg>', width=1, height=1),
                       PreparedImage(None, width=1, height=1),

@@ -185,6 +185,7 @@ class ProviderRequest:
     max_tokens: int = 2048
     selected_target_snapshot: dict | None = field(default=None, repr=False)
     selected_course_snapshot: dict | None = field(default=None, repr=False)
+    structured_output: bool = True
 
 
 @dataclass(frozen=True)
@@ -405,6 +406,14 @@ _JSON_INSTRUCTIONS = (
     'software mean the selected task description, not immutable review history.'
 )
 
+_CHAT_INSTRUCTIONS = (
+    '\nAnswer the current study question directly in the user\'s language. '
+    'Use readable paragraphs, lists, and Markdown code blocks when helpful. '
+    'For images, explain what is visible and state when text is too small or unclear. '
+    'Do not wrap the answer in a JSON envelope or propose database changes. '
+    'A normal conversation never changes courses, tasks, questions, or review records.'
+)
+
 
 _TARGET_FIELDS = {
     'id', 'course_id', 'course_name', 'course_archived', 'is_archived',
@@ -520,7 +529,11 @@ def prepare_request(request, pricing=None):
         raise ProviderError('invalid_request', '系统说明超过允许范围。')
     if not isinstance(request.messages, tuple) or not 1 <= len(request.messages) <= MAX_MESSAGES or not isinstance(request.images, tuple) or len(request.images) > MAX_IMAGES:
         raise ProviderError('context_limit', '会话上下文或图片数量超过允许范围。')
-    instructions = request.instructions + _JSON_INSTRUCTIONS
+    if type(request.structured_output) is not bool:
+        raise ProviderError('invalid_request', '回复格式无效；未发送资料。')
+    if not request.structured_output and (request.selected_target_snapshot or request.selected_course_snapshot):
+        raise ProviderError('invalid_request', '内容整理必须使用修改预览格式。')
+    instructions = request.instructions + (_JSON_INSTRUCTIONS if request.structured_output else _CHAT_INSTRUCTIONS)
     messages = [{'role': 'system', 'content': instructions}]
     total_characters, text_bytes = 0, _utf8_size(instructions)
     for item in request.messages:
@@ -554,7 +567,7 @@ def prepare_request(request, pricing=None):
         messages[-1]['content'] = parts
     payload = json.dumps({'model': MODEL, 'messages': messages, 'stream': False,
         'thinking': {'type': 'disabled'}, 'max_tokens': request.max_tokens,
-        'response_format': {'type': 'json_object'}}, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+        'response_format': {'type': 'json_object' if request.structured_output else 'text'}}, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
     # UTF-8 byte count is a conservative text bound, not a tokenizer estimate.
     # Include substantial message/protocol overhead plus official image ceiling.
     input_bound = text_bytes + 2048 + 128 * len(messages) + IMAGE_TOKEN_CEILING * len(request.images)
@@ -653,14 +666,27 @@ class DeepSeekProvider:
                 if finish_reason != 'stop' or message.get('role') != 'assistant' or message.get('tool_calls'):
                     raise ValueError()
                 content = message['content']
-                if not isinstance(content, str) or not content or len(content) > MAX_RESPONSE_CHARACTERS:
+                if not isinstance(content, str) or not content.strip() or len(content) > MAX_RESPONSE_CHARACTERS or '\x00' in content:
                     raise ValueError()
-                envelope = _json_loads(content)
-                if not isinstance(envelope, dict) or set(envelope) != {'text', 'drafts'}:
-                    raise ValueError()
-                text, drafts = envelope['text'], envelope['drafts']
-                if not isinstance(text, str) or not text.strip() or len(text) > MAX_RESPONSE_CHARACTERS or '\x00' in text or not isinstance(drafts, list) or len(drafts) > 3 or any(not isinstance(draft, dict) for draft in drafts):
-                    raise ValueError()
+                if request.structured_output:
+                    envelope = _json_loads(content)
+                    if not isinstance(envelope, dict) or set(envelope) != {'text', 'drafts'}:
+                        raise ValueError()
+                    text, drafts = envelope['text'], envelope['drafts']
+                    if not isinstance(text, str) or not text.strip() or len(text) > MAX_RESPONSE_CHARACTERS or '\x00' in text or not isinstance(drafts, list) or len(drafts) > 3 or any(not isinstance(draft, dict) for draft in drafts):
+                        raise ValueError()
+                else:
+                    # Display-only output can never create a modification draft.
+                    text, drafts = content, []
+                    # Accept an old valid answer-only envelope without exposing it.
+                    try:
+                        envelope = _json_loads(content)
+                    except (ValueError, RecursionError):
+                        envelope = None
+                    if (isinstance(envelope, dict) and set(envelope) == {'text', 'drafts'}
+                            and envelope['drafts'] == [] and isinstance(envelope['text'], str)
+                            and envelope['text'].strip() and '\x00' not in envelope['text']):
+                        text = envelope['text']
             except (KeyError, AttributeError, TypeError, ValueError, RecursionError):
                 raise ProviderError('unusable_answer', 'AI 返回内容未通过格式检查；未修改学习记录，也未自动重试。', usage=usage) from None
             return DeepSeekResult(request.request_id, ProviderResult(text=text, drafts=tuple(drafts)),

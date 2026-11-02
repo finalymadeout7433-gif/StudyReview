@@ -1,0 +1,137 @@
+@charset "UTF-8";
+/* Reading comfort: meaningful content stays readable at normal browser zoom. */
+:root { --muted: #626e65; }
+body { font-size: 15px; line-height: 1.7; }
+h3 { font-size: 17px; }
+input, select, textarea { font-size: 15px; }
+.page-heading p, .page-heading .muted { font-size: 15px; color: #626e65; }
+.nav-link, .mi-open .nav-link { font-size: 15px; color: #626e65; }
+.topbar, .date-label { font-size: 13px; color: #657161; }
+.breadcrumb-prefix { color: #707b6d; }
+.username { font-size: 13px; }
+.username small, .brand small, .sidebar-note p { font-size: 12px; }
+.sidebar-note strong { font-size: 15px; }
+.user-panel .text-button { font-size: 13px; }
+.eyebrow, .metric-index { font-size: 11px; color: #6e7967; }
+.button, .button.small { font-size: 14px; }
+.button { min-height: 42px; }
+.text-button, .filter-reset { font-size: 14px; }
+
+/* Emphasise the task itself, its status and the next action. */
+.metric-card > span:not(.metric-index) { font-size: 14px; color: #53634f; }
+.metric-card p, .metric-card strong small { font-size: 13px; color: #65715f; }
+.metric-card .metric-index { font-size: 11px; color: #6e7967; }
+.panel-heading h2, .chart-card .panel-heading h2 { font-size: 18px; }
+.panel-heading a, .panel-heading > span { font-size: 13px; color: #5f7057; }
+.list-row .row-title { font-size: 15px; font-weight: 600; }
+.row-main p, .quiet-strip, .panel-note { font-size: 13px; color: #66715f; }
+.complete-button { width: 30px; height: 30px; font-size: 14px; }
+.badge, .list-row > .badge { font-size: 12px; }
+.badge.neutral { color: #5d6b53; }
+.badge.danger, .badge.amber { color: #985022; }
+.point-chip, .chips { font-size: 13px; }
+.point-chip { color: #5c6c51; }
+.page-footer { font-size: 12px; color: #727b6c; }
+
+.filter-bar label, .statistics-filter .field > label { font-size: 13px; color: #5e6d57; }
+.filter-bar input, .filter-bar select { font-size: 14px; min-height: 42px; }
+.filter-bar .button, .filter-bar .filter-reset { font-size: 14px; }
+.table-wrap table { font-size: 14px; }
+.table-wrap th { font-size: 13px; color: #63715b; }
+.table-wrap td { padding-left: 14px; padding-right: 14px; }
+.task-table td strong { font-size: 15px; }
+.task-table .task-description { font-size: 13px !important; line-height: 1.65; color: #63705f; }
+.task-table td small { font-size: 13px; color: #687461; }
+.task-table .deadline-cell { font-size: 14px; }
+.task-table .row-actions, .task-table .row-actions a,
+.task-table .row-actions button, .task-table .row-menu summary { font-size: 14px; }
+.task-table .row-menu-items { min-width: 120px; }
+.task-table .row-menu-items a, .task-table .row-menu-items button { padding: 8px; }
+.table-scroll-hint, .count-pill { font-size: 12px; }
+.course-card p, .course-card a { font-size: 14px; }
+.course-card { display:flex; flex-direction:column; }
+.course-card h2 a { font-size:18px; font-weight:600; line-height:1.45; }
+.course-card .course-counts { margin-top:auto; }
+.course-card .card-link { align-self:flex-start; }
+.course-counts { display:flex; gap:14px; flex-wrap:wrap; margin:0 0 18px; font-size:13px; color:#65765b; }
+.course-counts b { font:17px "Bahnschrift",sans-serif; color:#436844; margin-right:3px; }
+.question-card-main > p, .question-card-meta { font-size: 14px; }
+.field > label, .form-panel .field > label { font-size: 14px; }
+.help-text, .field-error, .scope-note, .empty-state p { font-size: 13px; }
+.help-text { color: #65715f; }
+.question-body, .prose { font-size: 15px; line-height: 1.9; }
+.notice, .pagination, .back-link { font-size: 14px; }
+
+/* Chart labels and legends are information, not decorative captions. */
+.page-tag, .scope-pill, .range-shortcuts { font-size: 12px; color: #5a704f; }
+.chart-kicker { font-size: 11px; color: #6a785f; }
+.chart-summary span, .chart-note, .chart-data { font-size: 13px; color: #63735a; }
+.insights-heading p, .insight-days small { font-size: 13px; color: #64735e; }
+.chart-host svg text { font-size: 12px; fill: #5e7055; }
+.chart-host svg .axis-label { font-size: 12px; fill: #64745b; }
+.chart-host svg .chart-value { font-size: 13px; fill: #44613c; }
+.chart-bar-title, .chart-bar-title b { font-size: 14px; color: #506345; }
+.chart-legend, .donut-centre small, .heatmap-key { font-size: 12px; color: #65765a; }
+.donut-host { flex-wrap: wrap; }
+.donut-legend { font-size: 14px; min-width: min(200px, 100%); }
+.donut-legend b { font-size: 13px; color: #5b704e; }
+.chart-data table { font-size: 13px; }
+.chart-empty { font-size: 14px; color: #65765a; }
+.heatmap-dates, .heatmap-weekdays { font-size: 11px; color: #607353; }
+
+/* Login and assistant controls use the same reading scale as the main app. */
+.auth-story > p, .auth-card > .muted, .auth-switch { font-size: 14px; color: #65715f; }
+.auth-card .field > label { font-size: 14px; }
+.auth-card input { font-size: 15px; }
+.auth-card .help-text { font-size: 13px; }
+.password-toggle { font-size: 12px; color: #5d7052; }
+.study-path strong { font-size: 14px; }
+.study-path small, .auth-footnote, .auth-caption { font-size: 12px; color: #69765f; }
+.mi-launcher-label { font-size: 14px; }
+.mi-pane-nav button { font-size: 14px; min-height: 39px; color: #627659; }
+.mi-panel .eyebrow, .mi-state-line, .mi-feedback { font-size: 12px; color: #607653; }
+.mi-local-note, .mi-session-tools label, .mi-session-tools select { font-size: 13px; color: #5d6f53; }
+.mi-panel select, .mi-panel textarea, .mi-panel input:not([type=checkbox]) { font-size: 14px; }
+.mi-message p { font-size: 15px; line-height: 1.8; }
+.mi-message-heading { font-size: 12px; color: #627656; }
+.mi-composer > label, .mi-panel .stack-form label { font-size: 14px; }
+.mi-composer-actions .help-text, .mi-context-choice, .mi-context-choice p,
+.mi-context-choice label, .mi-composer-options > summary,
+.mi-target-tools summary, .mi-target-preview, .mi-budget-summary,
+.mi-panel .stack-form label:has(input[type=checkbox]) { font-size: 13px; }
+.mi-composer-options > summary { color: #58734b; }
+.mi-change-table th, .mi-change-table td { font-size: 13px; }
+
+@media (min-width: 621px) and (max-width: 1050px) {
+  .task-table { min-width: 740px !important; }
+  .task-table td { padding-left: 12px; padding-right: 12px; }
+}
+@media (max-width: 760px) {
+  .nav-link, .mi-open .nav-link { font-size: 13px; padding-left: 6px; padding-right: 6px; }
+  .page-heading p, .auth-story > p { font-size: 14px; }
+  .metric-card p { font-size: 12px; }
+  .topbar, .topbar .date-label, .mi-open .date-label { font-size: 12px; }
+  .username { font-size: 12px; }
+  .chart-card .panel-heading { flex-wrap: wrap; }
+  .task-table .course-cell { font-size: 13px; }
+  .auth-caption span { font-size: 11px; }
+}
+@media (max-width: 620px) {
+  .task-table td { padding: 0; }
+  .task-table .row-actions { gap: 9px; }
+  .task-table .row-actions a, .task-table .row-actions button,
+  .task-table .row-menu summary { font-size: 13px; }
+}
+@media (max-width: 480px) {
+  .list-row:has(.complete-button) { display: grid; grid-template-columns: 30px minmax(0,1fr); gap: 7px 10px; }
+  .list-row:has(.complete-button) > .badge { grid-column: 2; justify-self: start; }
+  .list-row:has(.complete-button) > form { align-self: start; }
+  .range-shortcuts { gap: 3px; }
+  .range-shortcuts a { padding-left: 7px; padding-right: 7px; }
+}
+
+/* Course titles lead the card; status stays in the same header. */
+.course-card .course-card-top { align-items:flex-start; gap:12px; margin-bottom:0; }
+.course-card .course-card-top h2 { flex:1; min-width:0; margin:0; overflow-wrap:anywhere; }
+.course-card .course-card-top .badge { flex-shrink:0; white-space:nowrap; }
+.course-card>p { margin-top:14px; }

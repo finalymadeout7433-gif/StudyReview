@@ -690,6 +690,7 @@ CREATE TABLE `learning_reviewrecord` (
   `knowledge_points_snapshot` json NOT NULL,
   `submission_key` char(32) NOT NULL,
   `question_id` bigint NOT NULL,
+  `is_example` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `submission_key` (`submission_key`),
   KEY `review_question_date_idx` (`question_id`,`review_date`),

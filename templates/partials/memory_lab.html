@@ -1,0 +1,10 @@
+<section class="panel memory-lab" id="memory-lab">
+  <div class="panel-heading"><div><h2>记忆与复习曲线</h2></div><span class="scope-pill">教学曲线 · FSRS预测</span></div>
+  <div class="memory-tabs" role="group" aria-label="选择记忆曲线类型"><button type="button" data-memory-mode="theory" aria-pressed="true">遗忘与间隔复习</button><button type="button" data-memory-mode="fsrs" aria-pressed="false">错题记忆预测</button></div>
+  <div class="memory-toolbar"><label id="theory-control">遗忘速度<select id="memory-speed"><option value="1.5">较快</option><option value="3" selected>中等</option><option value="6">较慢</option></select></label><label id="fsrs-control" hidden>选择错题<select id="memory-question"></select></label><label>展示跨度<select id="memory-horizon"><option value="14">14天</option><option value="30" selected>30天</option></select></label></div>
+  <p id="memory-caption" class="memory-caption" role="status">教学模型 · 非个人测量</p>
+  <div class="memory-chart" data-chart="memory" role="region" aria-label="遗忘与间隔复习曲线"></div>
+  <div id="memory-legend" class="memory-legend"></div><p id="memory-detail" class="chart-note"></p>
+  <div class="memory-risks" id="memory-risks" hidden><div><strong>{{ analytics.memory.risks.stable }}</strong><span>预测≥90%</span></div><div><strong>{{ analytics.memory.risks.attention }}</strong><span>预测70%—90%</span></div><div><strong>{{ analytics.memory.risks.priority }}</strong><span>预测低于70%</span></div><div><strong>{{ analytics.memory.risks.unknown }}</strong><span>暂无符合来源的预测</span></div></div>
+  <details class="model-explainer"><summary>曲线说明</summary><p>教学曲线以指数衰减与第1、3、7、14天复习节点说明遗忘和间隔复习，参数为预设值，并非艾宾浩斯原实验拟合或个人测量。</p><p>FSRS使用已保存的错题状态，预测未来不再复习时的回忆概率，目标保留率90%；与实际正确率不同。含初始化练习的状态会标明，选择“我的复习”时不用于预测。</p><p><a href="https://psychclassics.yorku.ca/Ebbinghaus/memory7.htm" target="_blank" rel="noopener noreferrer">艾宾浩斯原著</a> · <a href="https://github.com/open-spaced-repetition/py-fsrs/tree/v6.3.2" target="_blank" rel="noopener noreferrer">FSRS</a></p></details>
+</section>

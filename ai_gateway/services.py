@@ -255,7 +255,9 @@ class GatewayProvider:
         images = tuple(_image(self.user, item['id']) for item in context.images)
         request = ProviderRequest(self.request_id, context.instructions, context.messages, images,
             selected_target_snapshot=getattr(context, 'selected_target_snapshot', None),
-            selected_course_snapshot=getattr(context, 'selected_course_snapshot', None))
+            selected_course_snapshot=getattr(context, 'selected_course_snapshot', None),
+            structured_output=bool(getattr(context, 'selected_target_snapshot', None)
+                or getattr(context, 'selected_course_snapshot', None)))
         pricing = PeakPricing()
         prepared = prepare_request(request, pricing)
         reservation = reserve(self.user, prepared.quote, pricing, key_reference=key_reference)

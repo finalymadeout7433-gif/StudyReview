@@ -319,12 +319,14 @@ def append_message(user, session_id, text, attachment_ids, submission_key, *, pr
         message = Message.objects.create(session=session, role=Message.Role.USER,
             text=text, submission_key=key, request_hash=request_hash,
             status=Message.Status.PROCESSING if provider.connected else Message.Status.SAVED)
+        if session.title in ('新会话', '新对话') and not session.messages.exclude(pk=message.pk).exists():
+            session.title = text.replace('\n',' ').strip()[:36] or '图片提问'
         for position, image in enumerate(images):
             MessageAttachment.objects.create(message=message, attachment=image, position=position)
         from ai_gateway.models import MessageContext
         MessageContext.objects.create(message=message, owner=user, selected_history_ids=history_ids,
             selected_target_snapshot=target_snapshot, selected_course_snapshot=course_snapshot, expected_version=target_version)
-        session.save(update_fields=['updated_at'])
+        session.save(update_fields=['title', 'updated_at'])
         if not provider.connected:
             notice = Message.objects.create(session=session, role=Message.Role.SYSTEM,
                 text=getattr(provider, 'notice', NOTICE), status=Message.Status.NOT_CONNECTED, reply_to=message)
@@ -363,6 +365,8 @@ def append_message(user, session_id, text, attachment_ids, submission_key, *, pr
                 notice = '消息已在本机保存。剩余额度不足，未向 AI 发送本次资料；未生成答案或修改学习记录。'
             elif isinstance(failure, ProviderError) and failure.code == 'context_limit':
                 notice = '消息已在本机保存。主动选定的上下文超过安全长度，请减少选定资料；本次未发送给 AI。'
+            elif isinstance(failure, ProviderError) and failure.code == 'unusable_answer':
+                notice = '本次回复未完整返回或格式不正确，请重新提问。问题和图片已保存在本机。'
             else:
                 notice = '消息已在本机保存。本次处理失败，未生成可用答案，也未修改任何学习记录。'
             response = Message.objects.create(session=session, role=Message.Role.SYSTEM,

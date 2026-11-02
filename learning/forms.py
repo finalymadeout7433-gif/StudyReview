@@ -169,6 +169,8 @@ class StatisticsForm(forms.Form):
     course = forms.ModelChoiceField(label='课程范围', required=False, queryset=Course.objects.none(), empty_label='全部活跃课程')
     start = forms.DateField(label='复习开始日期', widget=DATE_WIDGET)
     end = forms.DateField(label='复习结束日期', widget=DATE_WIDGET)
+    review_source = forms.ChoiceField(label='记录范围', required=False, choices=[
+        ('all', '全部记录'), ('personal', '我的复习'), ('example', '练习记录')])
 
     def __init__(self, *args, user, **kwargs):
         super().__init__(*args, **kwargs)

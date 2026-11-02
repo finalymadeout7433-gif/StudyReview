@@ -1,0 +1,86 @@
+/* Extended learning analysis, with explicit provenance and model boundaries. */
+.insight-nav { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 22px; }
+.insight-nav a { font-size:13px; padding:7px 12px; border:1px solid #dbe3d4; border-radius:7px; color:#536d48; background:#fffefa; text-decoration:none; }
+.insight-nav a:hover { background:#eaf1e4; }
+.example-notice { display:flex; gap:12px; align-items:flex-start; background:#faf3e6; border:1px solid #e7d7b6; border-radius:9px; padding:13px 16px; margin:0 0 22px; color:#735c32; font-size:13px; line-height:1.8; }
+.example-notice strong { flex-shrink:0; }
+.memory-lab { padding:0 24px 20px; margin-bottom:28px; scroll-margin-top:20px; }
+.memory-lab .panel-heading h2 { font-size:22px; }
+.memory-lab .panel-heading { align-items:center; }
+.memory-tabs { display:flex; flex-wrap:wrap; gap:6px; background:#edf2e7; padding:5px; border-radius:10px; margin:20px 0; max-width:620px; }
+.memory-tabs button { flex:1 1 210px; background:none; border:0; border-radius:7px; padding:11px 13px; color:#65785b; font-size:14px; cursor:pointer; }
+.memory-tabs button[aria-pressed=true] { background:#fffefa; color:#365f44; font-weight:600; box-shadow:0 2px 7px #344c3020; }
+.memory-toolbar { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; }
+.memory-toolbar label { min-width:150px; max-width:100%; flex:0 1 auto; font-size:13px; color:#627558; }
+.memory-toolbar label[hidden] { display:none; }
+.memory-toolbar #fsrs-control { flex:1 1 320px; min-width:0; }
+.memory-toolbar select { display:block; width:100%; min-width:0; max-width:100%; margin-top:7px; font-size:14px; }
+.memory-caption { margin:18px 0 9px; font-size:14px; line-height:1.8; color:#596d50; }
+.memory-chart { width:100%; min-height:310px; }
+.memory-chart svg { display:block; width:100%; height:auto; max-height:350px; }
+.memory-chart svg text { font:12px "DengXian","Microsoft YaHei UI",sans-serif; fill:#617358; }
+.memory-chart circle:focus { outline:2px solid #48743c; outline-offset:3px; }
+.memory-legend { display:flex; flex-wrap:wrap; gap:10px 24px; margin-top:10px; font-size:13px; color:#607151; }
+.memory-legend span { display:flex; align-items:center; gap:8px; }
+.memory-legend i { width:22px; height:1px; display:inline-block; }
+.memory-risks { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:18px 0; }
+.memory-risks[hidden] { display:none; }
+.memory-risks>div { background:#f0f4e9; border-radius:8px; padding:14px; }
+.memory-risks>div:nth-child(3) { background:#f8eee7; }
+.memory-risks strong { display:block; font:28px "Bahnschrift",sans-serif; color:#4a7042; }
+.memory-risks span { font-size:12px; color:#647956; }
+.model-explainer { border-top:1px solid #e4eadc; padding-top:14px; margin-top:17px; font-size:13px; color:#617356; }
+.model-explainer summary { cursor:pointer; color:#4f7044; }
+.model-explainer p { line-height:1.85; margin-top:10px; }
+.model-explainer a { text-decoration:underline; text-underline-offset:3px; }
+.diagnostic-grid { margin-top:24px; scroll-margin-top:20px; }
+.diagnostic-grid .chart-card { padding-bottom:18px; }
+.workload-panel { grid-column:1/-1; }
+.priority-question { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:13px 0; border-bottom:1px solid #e9edde; text-decoration:none; }
+.priority-question strong { display:block; font-size:14px; color:#4b6241; line-height:1.6; }
+.priority-question span>small { display:block; margin-top:5px; font-size:12px; color:#718363; }
+.priority-question b { flex-shrink:0; font:23px "Bahnschrift",sans-serif; color:#a5744a; }
+.priority-question b small { font-size:12px; }
+.matrix-scroll { width:100%; overflow:auto; margin-top:10px; border-radius:6px; }
+.matrix-scroll table { width:100%; border-collapse:separate; border-spacing:5px; font-size:13px; }
+.matrix-scroll th { text-align:left; font-weight:500; padding:8px 5px; color:#64765a; line-height:1.5; }
+.matrix-scroll tbody th { font-size:13px; min-width:125px; max-width:155px; overflow-wrap:anywhere; }
+.matrix-scroll th a { color:#53694a; text-decoration:none; }
+.rating-matrix { min-width:490px; }
+.rating-matrix td { padding:12px 7px; min-width:60px; text-align:center; border-radius:6px; font:16px "Bahnschrift",sans-serif; }
+.rating-matrix .matrix-total { background:#f4f6ef; color:#64715a; }
+.workload-matrix { min-width:805px; }
+.workload-matrix thead th { font:12px "Bahnschrift","DengXian",sans-serif; white-space:nowrap; text-align:center; }
+.workload-matrix td { padding:0; }
+.load-cell { display:block; width:34px; height:34px; border:1px solid transparent; border-radius:5px; font:14px "Bahnschrift",sans-serif; cursor:pointer; }
+.load-cell:hover,.load-cell[aria-pressed=true] { outline:2px solid #789767; outline-offset:1px; }
+.workload-focus { margin-top:14px; font-size:13px; color:#5c7252; line-height:1.8; min-height:48px; }
+.workload-focus a { text-decoration:underline; text-underline-offset:3px; }
+.relationship-panel { margin-top:24px; scroll-margin-top:20px; }
+.relationship-panel .panel-heading { flex-wrap:wrap; }
+.graph-selector { display:block; font-size:12px; color:#607357; min-width:220px; max-width:100%; }
+.graph-selector select { display:block; margin-top:6px; width:100%; font-size:14px; }
+.graph-scroll { width:100%; overflow:auto; margin-top:8px; }
+.relationship-chart { width:100%; min-height:310px; }
+.relationship-chart svg { display:block; min-width:700px; }
+.relationship-chart .graph-column { font-size:12px; fill:#718562; }
+.relationship-chart .graph-type { font-size:10px; fill:#7d8f70; }
+.relationship-chart .graph-label { font-size:13px; fill:#3e5734; }
+.graph-label-text { font:13px/16px "DengXian","Microsoft YaHei UI",sans-serif; color:#3e5734; overflow-wrap:anywhere; overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+.relationship-chart a:hover rect,.relationship-chart a:focus rect { stroke:#6e945a; stroke-width:2px; }
+@media(max-width:1100px) { .diagnostic-grid { grid-template-columns:1fr; } }
+@media(max-width:760px) {
+  .memory-lab { padding:0 17px 17px; }
+  .memory-lab .panel-heading { align-items:flex-start; flex-wrap:wrap; }
+  .memory-lab .panel-heading h2 { font-size:19px; }
+  .memory-toolbar label { min-width:120px; }
+  .memory-toolbar { gap:12px; }
+  .memory-chart { min-height:220px; }
+  .memory-risks { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .memory-caption { font-size:13px; }
+  .memory-legend { font-size:12px; gap:10px; }
+  .insight-nav a { font-size:12px; padding:7px 9px; }
+  .example-notice { display:block; }
+  .example-notice strong { display:block; margin-bottom:4px; }
+}
+@media print { .memory-tabs,.memory-toolbar,.insight-nav { display:none; } .matrix-scroll,.graph-scroll { overflow:visible; } }
