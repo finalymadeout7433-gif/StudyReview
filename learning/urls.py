@@ -23,6 +23,7 @@ urlpatterns = [
     path('questions/', views.question_list, name='question-list'),
     path('questions/new/', views.question_edit, name='question-create'),
     path('questions/<int:pk>/', views.question_detail, name='question-detail'),
+    path('questions/<int:pk>/variant/', views.question_variant, name='question-variant'),
     path('questions/<int:pk>/edit/', views.question_edit, name='question-edit'),
     path('questions/<int:pk>/archive/', views.question_archive, name='question-archive'),
     path('reviews/', views.review_queue, name='review-queue'),
