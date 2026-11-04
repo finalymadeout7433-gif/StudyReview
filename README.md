@@ -2,7 +2,7 @@
 
 数据库课程项目：把课程、任务、错题、复习历史和统计连起来，提供 Windows 独立窗口及本地学习助手。
 
-本次更新：v2.1.0，2026-11-02。新增简洁界面、十个统计模块、七门课程内容模板、聊天式学习助手与截图粘贴，修复普通图片答疑返回格式及开发预览异常退出恢复。此版本的运行包需由仓库维护者上传至 Release；下方 latest 链接可能仍指向旧版。
+本次更新：v2.2。新增 22 组类似题练习，支持作答后查看解析、将类似题记录到错题本。Windows 运行包以 Releases 中对应版本为准。
 
 **下载软件：[GitHub Releases](https://github.com/finalymadeout7433-gif/StudyReview/releases/latest)。Windows ZIP 内含 Python 应用运行时，仍需本机 MySQL 8.4、WebView2、兼容 .NET Framework/VC++；不是无需环境的解压即用。** 按 [Windows 首次启动](docs/01-Windows首次启动.md) 从下载完成配置。
 

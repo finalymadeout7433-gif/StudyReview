@@ -11,11 +11,12 @@ from django.db.models import Count, Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods, require_POST
 from . import services
 from .forms import (LoginForm, RegisterForm, CourseForm, PointForm, TaskForm,
-    QuestionForm, AnswerForm, ReviewForm, StatisticsForm)
+    QuestionForm, AnswerForm, ReviewForm, StatisticsForm, VariantAnswerForm)
 from .models import Course, KnowledgePoint, Task, WrongQuestion
+from .question_variants import VARIANT_QUESTIONS
 from attachments.models import Attachment
 from scheduling.services import suggest_schedule
 
@@ -322,6 +323,48 @@ def owned_question(user, pk):
 
 
 @login_required
+@require_http_methods(['GET', 'POST'])
+def question_variant(request, pk):
+    question = owned_question(request.user, pk)
+    variant = VARIANT_QUESTIONS.get(question.title)
+    if question.is_readonly or variant is None:
+        raise Http404
+    form = VariantAnswerForm(request.POST if request.method == 'POST' else None)
+    revealed = form.is_bound and form.is_valid()
+    save_token = ''
+    save_error = ''
+    if revealed:
+        if request.POST.get('action') == 'save':
+            save_token = request.POST.get('save_token')
+            try:
+                services.read_token(save_token, request.user, 'question-create', question.pk)
+                saved = services.save_question(request.user, {
+                    'course': question.course,
+                    'knowledge_points': question.knowledge_points.all(),
+                    'title': f'【类似题】{question.title}'[:WrongQuestion._meta.get_field('title').max_length],
+                    'content': variant['prompt'],
+                    'original_answer': form.cleaned_data['answer'],
+                    'correct_answer': variant['answer'],
+                    'error_reason': variant['explanation'],
+                    'next_review_date': timezone.localdate() + timedelta(days=1),
+                }, token=save_token)
+            except ValidationError as exc:
+                save_error = ' '.join(exc.messages)
+            except IntegrityError:
+                save_error = '保存时发生冲突，请重试。'
+            else:
+                messages.success(request, '类似题已记录到错题本。')
+                return redirect('question-detail', pk=saved.pk)
+        else:
+            save_token = services.make_token(request.user, 'question-create', question)
+    return render(request, 'learning/question_variant.html', {
+        'question': question, 'variant': variant, 'form': form, 'revealed': revealed,
+        'save_token': save_token, 'save_error': save_error,
+        'section': 'questions', 'title': '类似题练习',
+    })
+
+
+@login_required
 def question_detail(request, pk):
     question = owned_question(request.user, pk)
     history = page(request, question.reviews.all().select_related('schedule_event').prefetch_related('image_snapshots__attachment'))
@@ -329,6 +372,7 @@ def question_detail(request, pk):
         record.gallery_images = [image_data(link.attachment, link.role) for link in record.image_snapshots.all()]
     return render(request, 'learning/question_detail.html', {'question': question,
         'question_images': question_images(question),
+        'has_variant': question.title in VARIANT_QUESTIONS,
         'page_obj': history, 'section': 'questions', 'title': question.title})
 
 
