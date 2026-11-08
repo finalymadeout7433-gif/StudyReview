@@ -1,5 +1,6 @@
 """Bounded, read-only projections and instance relationships for the statistics UI."""
 from datetime import timedelta, timezone as utc
+import json
 
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Exists, OuterRef
@@ -34,12 +35,20 @@ def extended_insights(user, courses, questions, review_source='all'):
     from fsrs import Card
     risks = {'stable': 0, 'attention': 0, 'priority': 0, 'unknown': 0}
     projections, valid, invalid, hidden = [], 0, 0, 0
+    # Only reuse successful checks for identical metadata within this request.
+    # Card validation and predictions remain per-state; nothing persists between
+    # requests, users, or changes to the installed scheduling engine.
+    validated_metadata = set()
     for state in states:
         if (review_source=='personal' and state.has_examples) or (review_source=='example' and not state.has_examples):
             hidden += 1
             continue
         try:
-            validate_metadata(state.algorithm,state.algorithm_version,state.config_version,state.config_snapshot)
+            metadata_key = (state.algorithm, state.algorithm_version, state.config_version,
+                            json.dumps(state.config_snapshot, sort_keys=True, allow_nan=False))
+            if metadata_key not in validated_metadata:
+                validate_metadata(state.algorithm,state.algorithm_version,state.config_version,state.config_snapshot)
+                validated_metadata.add(metadata_key)
             payload = validate_card_state(state.card_state,state.question_id)
             if payload['last_review'] is None:
                 continue

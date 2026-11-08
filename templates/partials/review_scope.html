@@ -1,0 +1,4 @@
+<section class="review-scope" aria-label="本轮复习范围">
+  <div><span class="eyebrow">本轮复习范围</span><p>{{ scope_label }}</p><span class="scope-counts">{{ remaining }} 题待处理{% if skipped_count %} · {{ skipped_count }} 题暂时跳过{% endif %} · 仅包含已到期的活跃错题</span></div>
+  <div class="scope-links"><a href="{{ scope_questions_url }}">查看范围内错题</a>{% if review_scope.params %}<a href="{% url 'review-queue' %}">切换到全部课程</a>{% endif %}</div>
+</section>

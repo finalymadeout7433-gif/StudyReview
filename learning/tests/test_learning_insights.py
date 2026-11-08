@@ -1,4 +1,5 @@
 import io
+from unittest.mock import patch
 from datetime import timedelta
 
 from django.contrib.auth.models import User
@@ -113,6 +114,22 @@ class LearningInsightsTests(TestCase):
         state.refresh_from_db()
         self.assertEqual(state.card_state,bad)
         self.assertNotIn(self.private.name,str(result))
+
+    def test_metadata_reuse_is_request_local_and_does_not_hide_invalid_states(self):
+        from learning.insights import validate_metadata
+        with patch('learning.insights.validate_metadata', wraps=validate_metadata) as validator:
+            self.assertEqual(self.analytics()['memory']['valid_count'],21)
+            self.assertEqual(validator.call_count,1)
+            self.assertEqual(self.analytics()['memory']['valid_count'],21)
+            self.assertEqual(validator.call_count,2)  # A new request revalidates.
+        state=SchedulingState.objects.filter(user=self.owner).first()
+        SchedulingState.objects.filter(pk=state.pk).update(config_version='unsupported')
+        result=self.analytics()['memory']
+        self.assertEqual((result['valid_count'],result['invalid_count']),(20,1))
+        SchedulingState.objects.filter(pk=state.pk).update(config_version=state.config_version,
+            card_state={**state.card_state,'difficulty':-1})
+        result=self.analytics()['memory']
+        self.assertEqual((result['valid_count'],result['invalid_count']),(20,1))
 
     def test_course_archive_filters_all_extended_views_and_workload(self):
         course=Course.objects.filter(owner=self.owner).first()

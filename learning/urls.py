@@ -1,7 +1,16 @@
 from django.urls import path
 from . import views
+from . import focus
+from . import focus_export
+from . import backup_views
 
 urlpatterns = [
+    path('backup/', backup_views.workspace, name='backup'),
+    path('backup/export/', backup_views.export, name='backup-export'),
+    path('focus/', focus.workspace, name='focus'),
+    path('focus/state/', focus.state, name='focus-state'),
+    path('focus/export/', focus_export.export, name='focus-export'),
+    path('focus/export/local/', focus_export.export_local, name='focus-export-local'),
     path('accounts/login/', views.StudyLoginView.as_view(), name='login'),
     path('accounts/logout/', views.StudyLogoutView.as_view(), name='logout'),
     path('accounts/register/', views.register, name='register'),
@@ -11,6 +20,9 @@ urlpatterns = [
     path('courses/<int:pk>/', views.course_detail, name='course-detail'),
     path('courses/<int:pk>/edit/', views.course_edit, name='course-edit'),
     path('courses/<int:pk>/archive/', views.course_archive, name='course-archive'),
+    path('courses/<int:course_pk>/chapters/new/', views.chapter_edit, name='chapter-create'),
+    path('courses/<int:course_pk>/chapters/<int:pk>/edit/', views.chapter_edit, name='chapter-edit'),
+    path('courses/<int:course_pk>/chapters/<int:pk>/delete/', views.chapter_delete, name='chapter-delete'),
     path('courses/<int:course_pk>/points/new/', views.point_edit, name='point-create'),
     path('courses/<int:course_pk>/points/<int:pk>/edit/', views.point_edit, name='point-edit'),
     path('courses/<int:course_pk>/points/<int:pk>/delete/', views.point_delete, name='point-delete'),
@@ -26,6 +38,7 @@ urlpatterns = [
     path('questions/<int:pk>/edit/', views.question_edit, name='question-edit'),
     path('questions/<int:pk>/archive/', views.question_archive, name='question-archive'),
     path('reviews/', views.review_queue, name='review-queue'),
+    path('reviews/<int:pk>/skip/', views.review_skip, name='review-skip'),
     path('reviews/<int:pk>/', views.review_question, name='review-question'),
     path('statistics/', views.statistics, name='statistics'),
 ]

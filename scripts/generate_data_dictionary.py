@@ -34,7 +34,9 @@ def main():
     for model in models:
         for field in model._meta.local_fields:
             if field.is_relation and field.remote_field:
-                lines.append('    ' + field.remote_field.model._meta.db_table + ' ||--o{ ' +
+                parent_end = '|o' if field.null else '||'
+                child_end = 'o|' if field.one_to_one else 'o{'
+                lines.append('    ' + field.remote_field.model._meta.db_table + ' ' + parent_end + '--' + child_end + ' ' +
                              model._meta.db_table + ' : ' + field.name)
     lines.extend([chr(96)*3, ''])
     for model in models:
@@ -74,7 +76,7 @@ def main():
             lines.append('无额外模型级索引；数据库自动为主键、唯一字段与外键建立相应索引。')
         lines.append('')
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    args.output.write_text('\n'.join(lines) + '\n', encoding='utf-8', newline='\n')
     print(f'Data dictionary generated: {len(models)} business models; no database connection.')
 
 if __name__ == '__main__':

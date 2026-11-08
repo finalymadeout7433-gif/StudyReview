@@ -34,6 +34,8 @@ def build_wsgi():
         raise DesktopError("Django 配置加载失败。请检查本机数据库配置与依赖；凭据内容不会显示在错误框。") from None
     if settings.DEBUG:
         raise DesktopError("独立窗口交付模式要求 DEBUG=False，请检查 Django 配置。")
+    if os.path.exists(os.path.join(settings.DATA_DIR, 'private', 'archive-restore.pending.json')):
+        raise DesktopError("检测到未完成的资料恢复。请保留目标数据目录，由维护人员核对数据库与媒体状态后再启动；不要重复导入。")
     # The production static middleware serves only collected assets. Refuse
     # a source-only fallback instead of enabling DEBUG/static discovery here.
     try:
@@ -133,6 +135,7 @@ def main(argv=None):
             return 0
         paths = RuntimePaths.resolve(args.resource_dir, args.data_dir, args.credentials_file)
         paths.apply_environment(args.settings)
+        os.environ['STUDY_DESKTOP_NATIVE'] = '0' if args.server_only else '1'
         if args.check:
             missing = [name for name in ("django", "waitress", "webview", "whitenoise")
                        if importlib.util.find_spec(name) is None]

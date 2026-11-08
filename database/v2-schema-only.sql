@@ -1,9 +1,3 @@
--- 仅结构参考，无用户行；初始化使用迁移，不向已有库导入。
--- MySQL dump 10.13  Distrib 8.4.11, for Win64 (x86_64)
---
--- Host: 127.0.0.1    Database: study_review_dev
--- ------------------------------------------------------
--- Server version	8.4.11
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,11 +9,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `ai_gateway_account`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ai_gateway_account` (
@@ -42,11 +31,6 @@ CREATE TABLE `ai_gateway_account` (
   CONSTRAINT `ai_gateway_account_chk_1` CHECK ((`revision` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ai_gateway_messagecontext`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ai_gateway_messagecontext` (
@@ -63,11 +47,6 @@ CREATE TABLE `ai_gateway_messagecontext` (
   CONSTRAINT `ai_gateway_messagecontext_owner_id_c6abb90d_fk_auth_user_id` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ai_gateway_requestledger`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ai_gateway_requestledger` (
@@ -103,11 +82,6 @@ CREATE TABLE `ai_gateway_requestledger` (
   CONSTRAINT `ai_ledger_state_valid` CHECK ((`state` in (_utf8mb4'reserved',_utf8mb4'succeeded',_utf8mb4'failed',_utf8mb4'uncertain')))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `assistant_chatsession`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assistant_chatsession` (
@@ -123,11 +97,6 @@ CREATE TABLE `assistant_chatsession` (
   CONSTRAINT `assistant_chatsession_owner_id_b7ba825d_fk_auth_user_id` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `assistant_draft`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assistant_draft` (
@@ -165,11 +134,6 @@ CREATE TABLE `assistant_draft` (
   CONSTRAINT `assistant_draft_chk_2` CHECK ((`applied_object_id` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `assistant_message`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assistant_message` (
@@ -192,11 +156,6 @@ CREATE TABLE `assistant_message` (
   CONSTRAINT `assist_message_status_valid` CHECK ((`status` in (_utf8mb4'saved',_utf8mb4'processing',_utf8mb4'completed',_utf8mb4'not_connected',_utf8mb4'provider_error')))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `assistant_messageattachment`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assistant_messageattachment` (
@@ -212,11 +171,6 @@ CREATE TABLE `assistant_messageattachment` (
   CONSTRAINT `assistant_messageattachment_chk_1` CHECK ((`position` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `attachments_attachment`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `attachments_attachment` (
@@ -272,11 +226,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `attachments_questionimage`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `attachments_questionimage` (
@@ -295,11 +244,6 @@ CREATE TABLE `attachments_questionimage` (
   CONSTRAINT `question_image_role_valid` CHECK ((`role` in (_utf8mb4'question',_utf8mb4'original_answer',_utf8mb4'correct_answer',_utf8mb4'error_reason')))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `attachments_reviewimagemanifest`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `attachments_reviewimagemanifest` (
@@ -341,11 +285,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `attachments_reviewimagesnapshot`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `attachments_reviewimagesnapshot` (
@@ -400,11 +339,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `auth_group`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_group` (
@@ -414,11 +348,6 @@ CREATE TABLE `auth_group` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `auth_group_permissions`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_group_permissions` (
@@ -432,11 +361,6 @@ CREATE TABLE `auth_group_permissions` (
   CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `auth_permission`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_permission` (
@@ -447,13 +371,8 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `auth_user`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user` (
@@ -470,13 +389,8 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `auth_user_groups`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user_groups` (
@@ -490,11 +404,6 @@ CREATE TABLE `auth_user_groups` (
   CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `auth_user_user_permissions`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user_user_permissions` (
@@ -508,11 +417,6 @@ CREATE TABLE `auth_user_user_permissions` (
   CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `django_content_type`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_content_type` (
@@ -521,13 +425,8 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `django_migrations`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_migrations` (
@@ -536,13 +435,8 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `django_session`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_session` (
@@ -553,11 +447,76 @@ CREATE TABLE `django_session` (
   KEY `django_session_expire_date_a5c62663` (`expire_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `learning_chapter` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) NOT NULL,
+  `position` int unsigned NOT NULL,
+  `course_id` bigint NOT NULL,
+  `parent_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `chapter_course_name_uq` (`course_id`,`name`),
+  KEY `chapter_course_tree_idx` (`course_id`,`parent_id`,`position`),
+  KEY `learning_chapter_parent_id_4831707a_fk_learning_chapter_id` (`parent_id`),
+  CONSTRAINT `learning_chapter_course_id_8627067e_fk_learning_course_id` FOREIGN KEY (`course_id`) REFERENCES `learning_course` (`id`),
+  CONSTRAINT `learning_chapter_parent_id_4831707a_fk_learning_chapter_id` FOREIGN KEY (`parent_id`) REFERENCES `learning_chapter` (`id`),
+  CONSTRAINT `learning_chapter_chk_1` CHECK ((`position` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_chapter_insert` BEFORE INSERT ON `learning_chapter` FOR EACH ROW BEGIN
+        IF NEW.parent_id IS NOT NULL THEN
+          IF NEW.parent_id = NEW.id OR
+             (SELECT course_id FROM learning_chapter WHERE id=NEW.parent_id) <> NEW.course_id OR
+             (SELECT parent_id FROM learning_chapter WHERE id=NEW.parent_id) IS NOT NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Parent must be a root chapter in the same course';
+          END IF;
+        END IF;
+     END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_chapter_update` BEFORE UPDATE ON `learning_chapter` FOR EACH ROW BEGIN
+          IF NEW.course_id <> OLD.course_id THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Moving chapters between courses is not supported';
+          END IF;
+          IF NEW.parent_id IS NOT NULL AND EXISTS(SELECT 1 FROM learning_chapter WHERE parent_id=OLD.id) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='A chapter with sections must remain a root';
+          END IF;
 
---
--- Table structure for table `learning_course`
---
-
+        IF NEW.parent_id IS NOT NULL THEN
+          IF NEW.parent_id = NEW.id OR
+             (SELECT course_id FROM learning_chapter WHERE id=NEW.parent_id) <> NEW.course_id OR
+             (SELECT parent_id FROM learning_chapter WHERE id=NEW.parent_id) IS NOT NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Parent must be a root chapter in the same course';
+          END IF;
+        END IF;
+     END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `learning_course` (
@@ -571,24 +530,176 @@ CREATE TABLE `learning_course` (
   UNIQUE KEY `course_owner_name_uq` (`owner_id`,`name`),
   KEY `course_owner_archive_idx` (`owner_id`,`is_archived`),
   CONSTRAINT `learning_course_owner_id_cb4ea5b1_fk_auth_user_id` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `learning_knowledgepoint`
---
-
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_course_owner_immutable` BEFORE UPDATE ON `learning_course` FOR EACH ROW BEGIN
+                    IF NEW.owner_id <> OLD.owner_id THEN
+                        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Course ownership is immutable';
+                    END IF;
+                END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `learning_focusinterval` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `started_at` datetime(6) NOT NULL,
+  `ended_at` datetime(6) DEFAULT NULL,
+  `session_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `learning_focusinterv_session_id_4c1aad22_fk_learning_` (`session_id`),
+  CONSTRAINT `learning_focusinterv_session_id_4c1aad22_fk_learning_` FOREIGN KEY (`session_id`) REFERENCES `learning_focussession` (`id`),
+  CONSTRAINT `focus_interval_order` CHECK (((`ended_at` is null) or (`ended_at` >= `started_at`)))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `learning_focussession` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `target_seconds` int unsigned NOT NULL,
+  `status` varchar(10) NOT NULL,
+  `started_at` datetime(6) NOT NULL,
+  `ended_at` datetime(6) DEFAULT NULL,
+  `course_id` bigint DEFAULT NULL,
+  `owner_id` int NOT NULL,
+  `active_owner_key` bigint GENERATED ALWAYS AS ((case when (`status` in (_utf8mb4'running',_utf8mb4'paused')) then `owner_id` else NULL end)) STORED,
+  `task_id` bigint DEFAULT NULL,
+  `task_title` varchar(180) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `active_owner_key` (`active_owner_key`),
+  KEY `focus_owner_status_idx` (`owner_id`,`status`),
+  KEY `learning_focussession_course_id_4b06a093_fk_learning_course_id` (`course_id`),
+  KEY `learning_focussession_task_id_69838f42_fk_learning_task_id` (`task_id`),
+  CONSTRAINT `learning_focussession_course_id_4b06a093_fk_learning_course_id` FOREIGN KEY (`course_id`) REFERENCES `learning_course` (`id`),
+  CONSTRAINT `learning_focussession_owner_id_bc43a940_fk_auth_user_id` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `learning_focussession_task_id_69838f42_fk_learning_task_id` FOREIGN KEY (`task_id`) REFERENCES `learning_task` (`id`),
+  CONSTRAINT `focus_end_consistent` CHECK ((((`ended_at` is null) and (`status` in (_utf8mb4'running',_utf8mb4'paused'))) or ((`ended_at` is not null) and (`status` = _utf8mb4'finished')))),
+  CONSTRAINT `focus_target_bounds` CHECK (((`target_seconds` >= 300) and (`target_seconds` <= 5400))),
+  CONSTRAINT `learning_focussession_chk_1` CHECK ((`target_seconds` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_focus_owner_insert` BEFORE INSERT ON `learning_focussession` FOR EACH ROW BEGIN
+                  IF NEW.course_id IS NOT NULL AND (SELECT owner_id FROM learning_course WHERE id=NEW.course_id) <> NEW.owner_id THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Focus course must belong to its owner';
+                  END IF;
+                END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_focus_task_insert` BEFORE INSERT ON `learning_focussession` FOR EACH ROW BEGIN
+                IF NEW.task_id IS NOT NULL AND NOT ((SELECT course_id FROM learning_task WHERE id=NEW.task_id) <=> NEW.course_id) THEN
+                  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Focus task must belong to the focus course';
+                END IF;
+                END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_focus_owner_update` BEFORE UPDATE ON `learning_focussession` FOR EACH ROW BEGIN
+                  IF NEW.course_id IS NOT NULL AND (SELECT owner_id FROM learning_course WHERE id=NEW.course_id) <> NEW.owner_id THEN
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Focus course must belong to its owner';
+                  END IF;
+                END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_focus_task_update` BEFORE UPDATE ON `learning_focussession` FOR EACH ROW BEGIN
+                IF NEW.task_id IS NOT NULL AND NOT ((SELECT course_id FROM learning_task WHERE id=NEW.task_id) <=> NEW.course_id) THEN
+                  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Focus task must belong to the focus course';
+                END IF;
+                END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `learning_knowledgepoint` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(120) NOT NULL,
   `course_id` bigint NOT NULL,
+  `chapter_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `point_course_name_uq` (`course_id`,`name`),
+  KEY `learning_knowledgepo_chapter_id_ac19c252_fk_learning_` (`chapter_id`),
+  CONSTRAINT `learning_knowledgepo_chapter_id_ac19c252_fk_learning_` FOREIGN KEY (`chapter_id`) REFERENCES `learning_chapter` (`id`),
   CONSTRAINT `learning_knowledgepoint_course_id_0b09b9f2_fk_learning_course_id` FOREIGN KEY (`course_id`) REFERENCES `learning_course` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_point_chapter_insert` BEFORE INSERT ON `learning_knowledgepoint` FOR EACH ROW BEGIN
+        IF NEW.chapter_id IS NOT NULL AND
+           (SELECT course_id FROM learning_chapter WHERE id=NEW.chapter_id) <> NEW.course_id THEN
+          SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Chapter must belong to the same course';
+        END IF;
+     END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -608,11 +719,26 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `learning_questionknowledgepoint`
---
-
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `study_point_chapter_update` BEFORE UPDATE ON `learning_knowledgepoint` FOR EACH ROW BEGIN
+        IF NEW.chapter_id IS NOT NULL AND
+           (SELECT course_id FROM learning_chapter WHERE id=NEW.chapter_id) <> NEW.course_id THEN
+          SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Chapter must belong to the same course';
+        END IF;
+     END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `learning_questionknowledgepoint` (
@@ -624,7 +750,7 @@ CREATE TABLE `learning_questionknowledgepoint` (
   KEY `learning_questionkno_knowledge_point_id_b798035b_fk_learning_` (`knowledge_point_id`),
   CONSTRAINT `learning_questionkno_knowledge_point_id_b798035b_fk_learning_` FOREIGN KEY (`knowledge_point_id`) REFERENCES `learning_knowledgepoint` (`id`),
   CONSTRAINT `learning_questionkno_question_id_9ba01b16_fk_learning_` FOREIGN KEY (`question_id`) REFERENCES `learning_wrongquestion` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -666,11 +792,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `learning_reviewrecord`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `learning_reviewrecord` (
@@ -694,10 +815,11 @@ CREATE TABLE `learning_reviewrecord` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `submission_key` (`submission_key`),
   KEY `review_question_date_idx` (`question_id`,`review_date`),
+  KEY `review_question_time_idx` (`question_id`,`reviewed_at`,`rating`,`is_example`),
   CONSTRAINT `learning_reviewrecor_question_id_d77d20e1_fk_learning_` FOREIGN KEY (`question_id`) REFERENCES `learning_wrongquestion` (`id`),
   CONSTRAINT `review_next_after_today` CHECK ((`next_review_date` > `review_date`)),
   CONSTRAINT `review_rating_valid` CHECK ((`rating` in (_utf8mb4'again',_utf8mb4'hard',_utf8mb4'good')))
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -729,11 +851,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `learning_task`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `learning_task` (
@@ -751,7 +868,7 @@ CREATE TABLE `learning_task` (
   KEY `task_course_status_due_idx` (`course_id`,`status`,`due_date`),
   CONSTRAINT `learning_task_course_id_96b7ebaa_fk_learning_course_id` FOREIGN KEY (`course_id`) REFERENCES `learning_course` (`id`),
   CONSTRAINT `task_completion_consistent` CHECK ((((`completed_at` is null) and (`status` = _utf8mb4'todo')) or ((`completed_at` is not null) and (`status` = _utf8mb4'done'))))
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -772,11 +889,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `learning_wrongquestion`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `learning_wrongquestion` (
@@ -796,7 +908,7 @@ CREATE TABLE `learning_wrongquestion` (
   UNIQUE KEY `creation_key` (`creation_key`),
   KEY `question_course_due_idx` (`course_id`,`is_archived`,`next_review_date`),
   CONSTRAINT `learning_wrongquestion_course_id_b5ac6fec_fk_learning_course_id` FOREIGN KEY (`course_id`) REFERENCES `learning_course` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -817,11 +929,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `scheduling_scheduleevent`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `scheduling_scheduleevent` (
@@ -888,11 +995,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `scheduling_schedulingstate`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `scheduling_schedulingstate` (
@@ -915,14 +1017,6 @@ CREATE TABLE `scheduling_schedulingstate` (
   CONSTRAINT `scheduling_schedulingstate_chk_1` CHECK ((`revision` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping events for database 'study_review_dev'
---
-
---
--- Dumping routines for database 'study_review_dev'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -932,5 +1026,3 @@ CREATE TABLE `scheduling_schedulingstate` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed

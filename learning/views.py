@@ -7,15 +7,17 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Q, OuterRef, Subquery, IntegerField
+from django.db.models.functions import Coalesce
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from . import services
-from .forms import (LoginForm, RegisterForm, CourseForm, PointForm, TaskForm,
+from .review_scope import ReviewScope
+from .forms import (LoginForm, RegisterForm, CourseForm, ChapterForm, PointForm, TaskForm,
     QuestionForm, AnswerForm, ReviewForm, StatisticsForm)
-from .models import Course, KnowledgePoint, Task, WrongQuestion
+from .models import Course, Chapter, KnowledgePoint, Task, WrongQuestion
 from attachments.models import Attachment
 from scheduling.services import suggest_schedule
 
@@ -123,19 +125,31 @@ def register(request):
 
 @login_required
 def dashboard(request):
+    from .focus import daily_seconds
+    from .models import FocusSession
     stats = services.summary(request.user)
+    stats['focus_minutes'] = daily_seconds(request.user, timezone.localdate()) // 60
+    stats['has_any_courses'] = Course.objects.filter(owner=request.user).exists()
     tasks = Task.objects.filter(course__owner=request.user, course__is_archived=False, status='todo').select_related('course')[:6]
     questions = due_questions(request.user)[:6]
+    active_focus = FocusSession.objects.filter(owner=request.user,status__in=['running','paused']).select_related('course').first()
     return render(request, 'learning/dashboard.html', {'stats': stats, 'tasks': tasks, 'questions': questions,
+        'active_focus': active_focus,
         'section': 'overview', 'title': '学习概览'})
 
 
 @login_required
 def course_list(request):
     courses, selected = archive_filter(request, Course.objects.filter(owner=request.user))
-    courses = courses.annotate(point_count=Count('knowledge_points', distinct=True),
-        task_count=Count('tasks', distinct=True),
-        question_count=Count('questions', filter=Q(questions__is_archived=False), distinct=True))
+    # Count each relation independently. Joining all four multiplies their rows
+    # before DISTINCT and makes even the paginator's total count expensive.
+    def related_count(model, **filters):
+        counts = model.objects.filter(course_id=OuterRef('pk'), **filters).order_by().values(
+            'course_id').annotate(total=Count('pk')).values('total')
+        return Coalesce(Subquery(counts, output_field=IntegerField()), 0)
+    courses = courses.annotate(point_count=related_count(KnowledgePoint),
+        chapter_count=related_count(Chapter), task_count=related_count(Task),
+        question_count=related_count(WrongQuestion, is_archived=False)).order_by('name', 'pk')
     return render(request, 'learning/course_list.html', {'page_obj': page(request, courses),
         'archive': selected, 'section': 'courses', 'title': '课程与知识点'})
 
@@ -143,8 +157,79 @@ def course_list(request):
 @login_required
 def course_detail(request, pk):
     course = services.owned_course(request.user, pk)
+    points = list(course.knowledge_points.annotate(question_count=Count('questions', distinct=True),
+        due_count=Count('questions',filter=Q(questions__is_archived=False,questions__course__is_archived=False,questions__next_review_date__lte=timezone.localdate()),distinct=True)))
+    chapters = list(course.chapters.all())
+    nodes = {c.pk: {'chapter': c, 'points': [], 'children': []} for c in chapters}
+    unassigned = []
+    for point in points:
+        (nodes[point.chapter_id]['points'] if point.chapter_id in nodes else unassigned).append(point)
+    roots = []
+    for chapter in chapters:
+        if chapter.parent_id in nodes:
+            nodes[chapter.parent_id]['children'].append(nodes[chapter.pk])
+        else:
+            roots.append(nodes[chapter.pk])
+    question_ids={chapter.pk:set() for chapter in chapters}
+    due_ids={chapter.pk:set() for chapter in chapters}
+    for chapter_id,question_id,due_date,archived in course.questions.values_list('knowledge_points__chapter_id','pk','next_review_date','is_archived'):
+        if chapter_id in question_ids:
+            question_ids[chapter_id].add(question_id)
+            if not course.is_archived and not archived and due_date<=timezone.localdate():due_ids[chapter_id].add(question_id)
+    for node in nodes.values():
+        node['question_count']=len(question_ids[node['chapter'].pk])
+        node['due_count']=len(due_ids[node['chapter'].pk])
+    for node in roots:
+        node['point_count'] = len(node['points']) + sum(len(child['points']) for child in node['children'])
+        ids=[node['chapter'].pk]+[child['chapter'].pk for child in node['children']]
+        node['question_count']=len(set().union(*(question_ids[key] for key in ids)))
+        node['due_count']=len(set().union(*(due_ids[key] for key in ids)))
+    tasks = course.tasks.aggregate(total=Count('pk'), done=Count('pk', filter=Q(status='done')))
+    course_due=0 if course.is_archived else course.questions.filter(is_archived=False,next_review_date__lte=timezone.localdate()).count()
     return render(request, 'learning/course_detail.html', {'course': course,
-        'points': course.knowledge_points.all(), 'section': 'courses', 'title': course.name})
+        'points': points, 'chapter_tree': roots, 'unassigned_points': unassigned,
+        'chapter_count': len(chapters), 'task_counts': tasks,'course_due':course_due,
+        'completion_percent': round(tasks['done'] * 100 / tasks['total']) if tasks['total'] else 0,
+        'section': 'courses', 'title': course.name})
+
+
+@login_required
+def chapter_edit(request, course_pk, pk=None):
+    course = services.owned_course(request.user, course_pk)
+    chapter = get_object_or_404(Chapter, pk=pk, course=course) if pk else None
+    if course.is_archived:
+        return forbidden(request)
+    form = ChapterForm(request.POST or None, course=course, instance=chapter)
+    if request.method == 'POST' and form.is_valid():
+        try:
+            services.save_chapter(request.user, course.pk, form.cleaned_data, pk)
+        except (ValidationError, IntegrityError) as exc:
+            form_error(form, exc)
+        else:
+            messages.success(request, '章节已保存。')
+            return redirect('course-detail', pk=course.pk)
+    return render(request, 'learning/form.html', {'form': form, 'title': '编辑章节' if pk else '添加章节',
+        'subtitle': course.name, 'section': 'courses', 'cancel_url': f'/courses/{course.pk}/'})
+
+
+@login_required
+def chapter_delete(request, course_pk, pk):
+    course = services.owned_course(request.user, course_pk)
+    chapter = get_object_or_404(Chapter, pk=pk, course=course)
+    if course.is_archived:
+        return forbidden(request)
+    error = None
+    if request.method == 'POST':
+        try:
+            services.delete_chapter(request.user, course.pk, pk)
+        except ValidationError as exc:
+            error = ' '.join(exc.messages)
+        else:
+            messages.success(request, '空章节已删除。')
+            return redirect('course-detail', pk=course.pk)
+    return render(request, 'learning/confirm.html', {'title': '删除章节', 'object_title': chapter.name,
+        'explanation': '仅允许删除没有子节、没有知识点的空章节。已有学习内容和复习历史不会删除。',
+        'error': error, 'cancel_url': f'/courses/{course.pk}/', 'section': 'courses'})
 
 
 @login_required
@@ -228,16 +313,32 @@ def task_list(request):
     course = selected_course(request)
     if course:
         tasks = tasks.filter(course=course)
+    search = request.GET.get('q', '').strip()[:180]
+    if search:
+        tasks = tasks.filter(Q(title__icontains=search) | Q(description__icontains=search))
+    counts=tasks.aggregate(all=Count('pk'),todo=Count('pk',filter=Q(status='todo')),
+        today=Count('pk',filter=Q(status='todo',due_date=timezone.localdate())),
+        overdue=Count('pk',filter=Q(status='todo',due_date__lt=timezone.localdate())),
+        done=Count('pk',filter=Q(status='done')))
+    query=request.GET.copy();query.pop('page',None)
+    tabs=[]
+    for key,label in [('all','全部'),('todo','未完成'),('today','今天到期'),('overdue','逾期'),('done','已完成')]:
+        query['status']=key
+        tabs.append({'key':key,'label':label,'count':counts[key],'url':'/tasks/?'+query.urlencode()})
     status = request.GET.get('status', 'all')
     if status == 'overdue':
         tasks = tasks.filter(status='todo', due_date__lt=timezone.localdate())
     elif status in ('todo', 'done'):
         tasks = tasks.filter(status=status)
+    elif status == 'today':
+        tasks = tasks.filter(status='todo', due_date=timezone.localdate())
+    elif status == 'upcoming':
+        tasks = tasks.filter(status='todo', due_date__range=(timezone.localdate(), timezone.localdate()+timedelta(days=6)))
     else:
         status = 'all'
     return render(request, 'learning/task_list.html', {'page_obj': page(request, tasks),
         'courses': Course.objects.filter(owner=request.user), 'selected_course': course,
-        'status': status, 'archive': archived, 'section': 'tasks', 'title': '学习任务'})
+        'status': status, 'q': search, 'archive': archived,'task_tabs':tabs, 'section': 'tasks', 'title': '学习任务'})
 
 
 @login_required
@@ -270,6 +371,14 @@ def task_status(request, pk):
     except ValidationError:
         return forbidden(request)
     messages.success(request, '任务状态已更新。')
+    from urllib.parse import urlsplit
+    target=request.POST.get('next','')[:2048]
+    try:
+        parsed=urlsplit(target)
+        if parsed.path=='/tasks/' and not parsed.scheme and not parsed.netloc:
+            return redirect(target)
+    except ValueError:
+        pass
     return redirect('task-list')
 
 
@@ -293,27 +402,22 @@ def task_delete(request, pk):
 def question_list(request):
     questions, archived = archive_filter(request, WrongQuestion.objects.filter(course__owner=request.user)
         .select_related('course').prefetch_related('knowledge_points'), question=True)
-    course = selected_course(request)
-    if course:
-        questions = questions.filter(course=course)
-    search = request.GET.get('q', '').strip()[:180]
-    if search:
-        questions = questions.filter(title__icontains=search)
-    point = None
-    if request.GET.get('point'):
-        try:
-            point_id = int(request.GET['point'])
-        except (ValueError, TypeError):
-            raise Http404()
-        point = get_object_or_404(KnowledgePoint, pk=point_id, course__owner=request.user)
-        questions = questions.filter(knowledge_points=point)
-    points = KnowledgePoint.objects.filter(course__owner=request.user)
-    if course:
-        points = points.filter(course=course)
-    return render(request, 'learning/question_list.html', {'page_obj': page(request, questions),
-        'courses': Course.objects.filter(owner=request.user), 'points': points.select_related('course'),
-        'selected_course': course, 'selected_point': point, 'q': search, 'archive': archived,
+    from .question_filters import filtered_questions
+    questions,filters=filtered_questions(request.user,request.GET,questions,selected_course(request),archived)
+    return render(request, 'learning/question_list.html', {**filters,'page_obj': page(request, questions),
+        'courses': Course.objects.filter(owner=request.user),
+        'review_query': review_filter_query(filters),
         'section': 'questions', 'title': '错题本'})
+
+
+
+def review_filter_query(filters):
+    from urllib.parse import urlencode
+    params = {key: str(filters['selected_' + key].pk) for key in ('course', 'chapter', 'point')
+              if filters.get('selected_' + key)}
+    if filters.get('q'):
+        params['q'] = filters['q']
+    return '?' + urlencode(params) if params else ''
 
 
 def owned_question(user, pk):
@@ -324,10 +428,15 @@ def owned_question(user, pk):
 @login_required
 def question_detail(request, pk):
     question = owned_question(request.user, pk)
+    scope = ReviewScope(request)
+    if not scope.questions.filter(pk=pk).exists():
+        raise Http404()
     history = page(request, question.reviews.all().select_related('schedule_event').prefetch_related('image_snapshots__attachment'))
     for record in history:
         record.gallery_images = [image_data(link.attachment, link.role) for link in record.image_snapshots.all()]
     return render(request, 'learning/question_detail.html', {'question': question,
+        'review_query': scope.query_string,
+        'scope_questions_url': scope.url('question-list', reset=True),
         'question_images': question_images(question),
         'page_obj': history, 'section': 'questions', 'title': question.title})
 
@@ -374,13 +483,29 @@ def due_questions(user):
 
 @login_required
 def review_queue(request):
-    return render(request, 'learning/review_queue.html', {'page_obj': page(request, due_questions(request.user)),
-        'section': 'reviews', 'title': '今日复习'})
+    scope = ReviewScope(request)
+    return render(request, 'learning/review_queue.html', {**scope.context(),
+        'page_obj': page(request, scope.pending()), 'section': 'reviews', 'title': '今日复习'})
+
+
+@login_required
+@require_POST
+def review_skip(request, pk):
+    scope = ReviewScope(request)
+    question = get_object_or_404(scope.questions, pk=pk)
+    if question.is_readonly or not question.is_due:
+        messages.info(request, '这道题已不在当前到期范围，学习记录未改动。')
+        return redirect(scope.next_url())
+    messages.info(request, '已暂时跳过；不计复习、不改下次日期，可在本轮列表重新查看。')
+    return redirect(scope.skip(question))
 
 
 @login_required
 def review_question(request, pk):
+    scope = ReviewScope(request)
     question = owned_question(request.user, pk)
+    if not scope.questions.filter(pk=pk).exists():
+        raise Http404()
     revealed = False
     if request.method == 'POST' and request.POST.get('action') == 'save':
         form = ReviewForm(request.POST)
@@ -398,14 +523,13 @@ def review_question(request, pk):
                     form_error(form, exc)
                 else:
                     messages.success(request, '复习已保存，下次日期已更新。' if created else '本次复习已保存，无需重复提交。')
-                    next_question = due_questions(request.user).first()
-                    return redirect('review-question', pk=next_question.pk) if next_question else redirect('review-queue')
+                    return redirect(scope.next_url())
     else:
         if question.is_readonly:
             return forbidden(request)
         if not question.is_due:
             messages.info(request, '这道题尚未到复习日期。')
-            return redirect('review-queue')
+            return redirect(scope.url())
         form = AnswerForm(request.POST or None, initial={'token': services.make_token(request.user, 'review', question)})
         if request.method == 'POST':
             if request.POST.get('action') != 'reveal':
@@ -426,19 +550,25 @@ def review_question(request, pk):
         except ValidationError as error:
             scheduling_error = ' '.join(error.messages)
     visible_images = [image for image in question_images(question) if revealed or image['role'] == 'question']
-    return render(request, 'learning/review_question.html', {'question': question, 'form': form,
+    return render(request, 'learning/review_question.html', {**scope.context(), 'question': question, 'form': form,
+        'skip_url': scope.url('review-skip', question.pk),
+        'has_next_question': scope.pending().exclude(pk=pk).exists(),
         'question_images': visible_images, 'schedule_suggestions': suggestions, 'scheduling_error': scheduling_error,
-        'revealed': revealed, 'remaining': due_questions(request.user).count(), 'section': 'reviews', 'title': '专注复习',
+        'revealed': revealed, 'section': 'reviews', 'title': '专注复习',
         'suggested_dates': {key: proposal.due_date.isoformat() for key, proposal in suggestions.items()}})
 
 
 @login_required
 def statistics(request):
     today = timezone.localdate()
-    data = request.GET if request.GET else {'start': today - timedelta(days=6), 'end': today}
+    data = request.GET.copy()
+    # Course deep links inherit a useful period; explicitly invalid input still fails validation.
+    data.setdefault('start', (today - timedelta(days=29)).isoformat())
+    data.setdefault('end', today.isoformat())
     form = StatisticsForm(data, user=request.user)
     stats = None
     analytics = None
+    activity = []
     if form.is_valid():
         selected = form.cleaned_data['course']
         review_source = form.cleaned_data.get('review_source') or 'all'
@@ -447,8 +577,10 @@ def statistics(request):
         from .analytics import learning_analytics
         analytics = learning_analytics(request.user, selected.pk if selected else None,
             form.cleaned_data['start'], form.cleaned_data['end'], review_source=review_source)
+        from .activity import course_activity
+        activity=course_activity(request.user,selected.pk if selected else None,form.cleaned_data['start'],form.cleaned_data['end'],review_source)
     return render(request, 'learning/statistics.html', {'form': form, 'stats': stats,
-        'analytics': analytics, 'section': 'statistics', 'title': '学习统计',
+        'analytics': analytics,'course_activity':activity, 'section': 'statistics', 'title': '学习统计',
         'statistics_ranges': [{'label': label, 'start': (today-timedelta(days=days-1)).isoformat(),
             'end': today.isoformat()} for days, label in [(7, '近7天'), (30, '近30天'), (84, '近12周')]]})
 

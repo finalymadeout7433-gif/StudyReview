@@ -1,0 +1,33 @@
+/* Shared reading and interaction hierarchy. No data or navigation semantics change. */
+body{font-family:"Microsoft YaHei UI","Microsoft YaHei","PingFang SC",sans-serif;color:#28352f}
+.page-heading{margin-bottom:24px}.page-heading p{max-width:62em;line-height:1.8;color:#536258}
+.eyebrow{color:#526357;letter-spacing:.8px}.topbar,.date-label,.breadcrumb-prefix,.nav-link{color:#536258}
+.filter-bar label,.table-wrap th{color:#4d6053;font-weight:600}
+.filter-bar input,.filter-bar select,.button{min-height:44px}
+input::placeholder,textarea::placeholder{color:#69766c;opacity:1}
+.filter-reset{padding:10px 8px;display:inline-flex;align-items:center;min-height:44px;color:#536258}
+.count-pill{display:inline-block;background:#edf1eb;color:#45614c;padding:2px 9px;border-radius:20px;font-weight:600}
+.metric-grid{gap:0;border:1px solid var(--border);border-radius:14px;background:var(--surface);overflow:hidden}
+.metric-grid>.metric-card{border:0;border-left:1px solid var(--border);border-radius:0;box-shadow:none;background:transparent}
+.metric-grid>.metric-card:first-child{border-left:0}.metric-grid>.metric-card.accent-card{background:#edf3ed}
+.metric-grid>a.metric-card:hover,.metric-grid>a.metric-card:focus-visible{background:#e5eee6;transform:none}
+.metric-grid>a.metric-card:focus-visible{outline-offset:-4px}
+.course-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px}
+.course-card{padding:24px}.course-card h2 a{font-size:20px}.course-card>p{margin-bottom:24px;line-height:1.8;color:#536258}
+.course-card .course-counts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.course-counts b{display:block;font-size:24px;line-height:1.5;margin:0}.course-counts span{font-size:13px;color:#536258}
+.card-link{min-height:44px;display:inline-flex;align-items:center}
+.question-list{gap:12px}.question-card{margin:0;padding:20px 24px}.question-card-main h2{line-height:1.6}.question-card-main>p{line-height:1.8;color:#536258}
+.question-card-meta{gap:10px}.question-card-meta .actions{gap:12px;flex-wrap:wrap}
+.question-card:focus-within{border-color:#8ca38e}.question-card .button.small{min-height:44px}
+.task-table tbody tr:hover,.task-table tbody tr:focus-within{background:#f3f7f1}
+.task-table .row-actions{gap:8px;align-items:center;flex-wrap:wrap}
+.task-table .row-actions>a,.task-table .row-actions>form>button,.task-table .row-menu>summary{display:inline-flex;align-items:center;min-height:40px;padding:6px 7px;color:#365744}
+.task-table .row-actions>a[aria-label^="专注任务"]{border:1px solid #c1d1c1;border-radius:7px;background:#eef4ee;padding:6px 10px}
+.task-table .task-description,.task-table td small,.row-main p,.question-card-meta{color:#536258!important}
+.insight-nav{margin:0 0 22px;gap:8px;background:var(--canvas)}
+.insight-nav a{padding:8px 12px;border-radius:7px;min-height:44px;color:#365744}.insight-nav a:hover,.insight-nav a:focus-visible{background:#e4ede3}
+.notice{border-left:3px solid #56745d}.complete-button{min-width:36px;min-height:36px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #365f48;outline-offset:3px}
+@media(max-width:900px){.metric-grid>.metric-card:nth-child(3){border-left:0}.metric-grid>.metric-card:nth-child(n+3){border-top:1px solid var(--border)}}
+@media(max-width:620px){.course-card,.question-card{padding:18px}.question-list{gap:12px}.course-card .course-counts{gap:8px}.course-counts b{font-size:22px}.insight-nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:8px 0}.insight-nav a{font-size:13px;padding:8px}.complete-button{min-width:40px;min-height:40px}}

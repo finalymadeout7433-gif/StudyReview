@@ -1,5 +1,4 @@
 {% load static %}
-<button type="button" class="mi-launcher" id="mi-launcher" aria-label="打开学习助手" aria-haspopup="dialog" aria-controls="mi-panel">{% if mi_avatar_available %}<img src="{% static 'img/mi-avatar.png' %}" alt="">{% else %}<span class="mi-placeholder">拾</span>{% endif %}<span class="mi-launcher-label">学习助手</span></button>
 <dialog id="mi-panel" class="mi-panel chat-workspace" aria-labelledby="mi-heading">
   <aside class="mi-conversations" aria-label="对话历史"><div class="mi-chat-brand">拾习 <span>学习助手</span></div><button type="button" class="mi-new-chat" id="mi-new-session">＋ 新对话</button><p class="mi-history-heading">最近对话</p><select id="mi-session" aria-label="切换会话" hidden></select><div id="mi-session-list" class="mi-session-list"></div><p id="mi-no-sessions" class="mi-no-sessions">暂无对话</p><button type="button" class="text-button" id="mi-more-sessions" hidden>更多对话</button><div class="mi-sidebar-foot">DeepSeek</div></aside>
   <div class="mi-chat-main">

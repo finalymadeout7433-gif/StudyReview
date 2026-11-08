@@ -51,8 +51,13 @@
     if (name==='config') refreshConfig().catch(error=>feedback(error.message));
   }
   function syncUI(){document.dispatchEvent(new Event('study-assistant-ui'));}
-  function openPanel(){if(!panel.open){panel.showModal();document.body.classList.add('assistant-visible');syncUI();}}
-  panel.addEventListener('close',()=>document.body.classList.remove('assistant-visible'));
+  let returnFocus=null;
+  function openPanel(){if(!panel.open){returnFocus=document.activeElement;panel.showModal();document.body.classList.add('assistant-visible');syncUI();}}
+  panel.addEventListener('close',()=>{
+    document.body.classList.remove('assistant-visible');
+    const target=returnFocus?.isConnected&&returnFocus!==document.body?returnFocus:$('mi-launcher');
+    target.focus({preventScroll:true});returnFocus=null;
+  });
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&panel.open&&!$('learning-image-viewer').open&&!$('mi-crop-dialog').open)panel.close();
   });
