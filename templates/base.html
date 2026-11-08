@@ -19,7 +19,8 @@
 <link rel="stylesheet" href="{% static 'css/focus-character.css' %}?v=living-v3">
 <link rel="stylesheet" href="{% static 'css/navigation-motion.css' %}?v=living-v3">
 <link rel="stylesheet" href="{% static 'css/pixel-window.css' %}?v=borderless-v5">
-<script src="{% static 'js/pixel-studio.js' %}?v=living-v3" defer></script>
+<link rel="stylesheet" href="{% static 'css/pixel-scenery-motion.css' %}?v=motion-v6">
+<script src="{% static 'js/pixel-studio.js' %}?v=motion-v6" defer></script>
 <script src="{% static 'js/focus-character.js' %}?v=living-v3" defer></script>
 <script src="{% static 'js/studio.js' %}?v=20261027-1" defer></script></head>
 <body data-section="{{ section|default:'account' }}" {% if user.is_authenticated %}class="has-mi-assistant" data-user-id="{{ user.pk }}"{% endif %}>
@@ -40,7 +41,7 @@
 {% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<div class="notice {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
 {% if section != 'focus' %}{% include 'partials/pixel_scenery.html' %}{% endif %}
 {% block content %}{% endblock %}
-<footer class="page-footer" title="{{ build_version }}">拾习 · {{ build_label }}</footer></main></div></div>
+</main></div></div>
 {% else %}
 <main id="main" class="auth-shell" tabindex="-1">{% if messages %}{% for message in messages %}<div class="notice">{{ message }}</div>{% endfor %}{% endif %}{% block auth_content %}{% endblock %}</main>
 {% endif %}

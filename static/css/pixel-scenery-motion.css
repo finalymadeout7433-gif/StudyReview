@@ -1,0 +1,67 @@
+/* Original pixel scenery: bounded transform/opacity motion, no assets or frame loops.
+   Each layer has an explicit marker for pause, reduced motion and temporal QA. */
+.pixel-scenery .scenery-motion{transform-box:view-box}
+.pixel-scenery .scenery-cloud{animation:scenery-cloud-drift 14s steps(24,end) infinite alternate}
+.pixel-scenery .scenery-cloud--near{animation-duration:12s;animation-delay:-4s}
+.pixel-scenery .scenery-cloud--high{animation-duration:12s;animation-delay:-3s}
+.pixel-scenery .scenery-cloud--dusk{opacity:.72;animation-duration:16s;animation-delay:-5s}
+.pixel-scenery .scenery-current{animation:scenery-current-east 3.6s steps(12,end) infinite}
+.pixel-scenery .scenery-current--far{animation-duration:4.8s;animation-delay:-2.4s}
+.pixel-scenery .scenery-current--down{animation-name:scenery-current-down}
+.pixel-scenery .scenery-bird{animation:scenery-bird-flight 14s steps(56,end) infinite;animation-delay:-3s}
+.pixel-scenery .scenery-bird--orchard{animation-duration:16s;animation-delay:-6s}
+.pixel-scenery .scenery-bird--ridge{animation-duration:15s;animation-delay:-4s}
+.pixel-scenery .scenery-bird--companion{animation-duration:15s;animation-delay:-4.6s}
+.pixel-scenery .scenery-bird--gull{animation-duration:13s;animation-delay:-6s}
+.pixel-scenery .scenery-wings{transform-box:fill-box;transform-origin:center 100%;animation:scenery-wing-beat 1.2s steps(2,end) infinite}
+.pixel-scenery .scenery-leaf{animation:scenery-leaf-fall 7.6s steps(38,end) infinite}
+.pixel-scenery .scenery-leaf--early{animation-delay:-1.6s}
+.pixel-scenery .scenery-leaf--late{animation-duration:8.4s;animation-delay:-5s}
+.pixel-scenery .scenery-leaf--long{animation-duration:9s;animation-delay:-3.4s}
+.pixel-scenery .scenery-leaf--short{animation-name:scenery-leaf-fall-short;animation-duration:6.4s}
+.pixel-scenery .scenery-stars{animation:scenery-star-breathe 4.8s steps(12,end) infinite alternate}
+.pixel-scenery .scenery-stars--late{animation-duration:6s;animation-delay:-3s}
+.pixel-scenery .scenery-meteor{animation:scenery-meteor-cross 10s steps(50,end) infinite;animation-delay:-1s}
+.pixel-scenery .scenery-lighthouse-sweep{transform-origin:544px 46px;animation:scenery-beacon-turn 10s steps(100,end) infinite}
+/* Room ambience is independent of the focus scholar and timer mode. */
+.pixel-room .scenery-room-cloud{animation:scenery-room-cloud-drift 12s steps(24,end) infinite alternate}
+.pixel-room .scenery-room-windmill{transform-box:view-box;transform-origin:200px 65px;animation:scenery-windmill-turn 10s steps(80,end) infinite}
+.pixel-room .scenery-room-beam{transform-box:view-box;transform-origin:263px 55px;animation:scenery-room-beacon 8s steps(32,end) infinite alternate}
+.pixel-room .scenery-room-steam{animation:scenery-steam-rise 3.8s steps(12,end) infinite}
+.pixel-room .scenery-room-steam--late{animation-delay:-1.9s}
+/* Ready-room ambience must remain controllable on narrow screens too. */
+.pixel-room .valley-controls{flex-wrap:wrap}
+@media(max-width:580px){
+ .timer-panel[data-session=""] .pixel-room-caption{display:flex;padding:5px 6px}
+ .pixel-room .valley-controls{gap:4px}
+ .pixel-room [data-action]{min-height:32px}
+}
+/* A paused scene freezes its phase. Light/wind controls affect only their layer. */
+[data-scene]:not([data-animate="true"]) .scenery-motion{animation-play-state:paused!important}
+.pixel-scenery[data-light="off"] .scenery-lighthouse-sweep,
+.pixel-room[data-light="off"] .scenery-room-beam{opacity:0!important;animation-play-state:paused!important}
+.pixel-room[data-wind="off"] .scenery-room-windmill{animation-play-state:paused!important}
+@keyframes scenery-cloud-drift{from{transform:translateX(-24px)}to{transform:translateX(24px)}}
+/* Water travels in one direction and fades at loop seams, never rocking backwards. */
+@keyframes scenery-current-east{0%{transform:translateX(-12px);opacity:0}12%{opacity:.85}85%{opacity:.85}100%{transform:translateX(12px);opacity:0}}
+@keyframes scenery-current-down{from{transform:translateY(0)}to{transform:translateY(24px)}}
+@keyframes scenery-bird-flight{0%{transform:translate(-32px,2px);opacity:0}8%{opacity:1}50%{transform:translate(24px,-4px)}90%{opacity:1}100%{transform:translate(80px,0);opacity:0}}
+@keyframes scenery-wing-beat{0%,100%{transform:scaleY(1)}50%{transform:scaleY(-.65)}}
+@keyframes scenery-leaf-fall{0%{transform:translate(0,0);opacity:0}8%{opacity:1}35%{transform:translate(12px,26px)}65%{transform:translate(4px,50px);opacity:1}90%{opacity:.8}100%{transform:translate(24px,76px);opacity:0}}
+@keyframes scenery-leaf-fall-short{0%{transform:translate(0,0);opacity:0}8%{opacity:1}40%{transform:translate(-10px,22px)}75%{transform:translate(2px,40px);opacity:1}100%{transform:translate(-14px,56px);opacity:0}}
+@keyframes scenery-star-breathe{from{opacity:.4}to{opacity:1}}
+@keyframes scenery-meteor-cross{0%{transform:translate(0,0);opacity:0}5%{opacity:.75}34%{transform:translate(100px,36px);opacity:.75}40%,100%{transform:translate(120px,44px);opacity:0}}
+@keyframes scenery-beacon-turn{0%{transform:rotate(0);opacity:.42}25%{opacity:.2}50%{transform:rotate(180deg);opacity:.48}75%{opacity:.2}100%{transform:rotate(360deg);opacity:.42}}
+@keyframes scenery-room-cloud-drift{from{transform:translateX(-10px)}to{transform:translateX(14px)}}
+@keyframes scenery-windmill-turn{to{transform:rotate(360deg)}}
+@keyframes scenery-room-beacon{from{transform:rotate(-30deg);opacity:.18}to{transform:rotate(30deg);opacity:.6}}
+@keyframes scenery-steam-rise{0%{transform:translate(0,2px);opacity:0}15%{opacity:.85}70%{opacity:.55}100%{transform:translate(3px,-10px);opacity:0}}
+@media(prefers-reduced-motion:reduce){
+ [data-scene] .scenery-motion{animation:none!important}
+ .pixel-scenery .scenery-meteor{opacity:0}
+ .pixel-scenery .scenery-lighthouse-sweep{opacity:.35}
+ .pixel-room .scenery-room-beam{opacity:.4}
+}
+
+/* Keep scenery controls aligned without an implementation-credit caption. */
+.pixel-scenery .valley-toolbar{justify-content:flex-end}

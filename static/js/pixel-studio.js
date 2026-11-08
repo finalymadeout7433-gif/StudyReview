@@ -16,15 +16,16 @@
  try{enabled=localStorage.getItem(key)!=='off'}catch(_){}
  const visible=new WeakMap(scenes.map(s=>[s,true]));
  function update(){
-  const allowed=enabled&&!media.matches&&!document.hidden;
   scenes.forEach(scene=>{
-   const running=!scene.hasAttribute('data-focus-scene')||scene.dataset.mode==='running';
-   scene.querySelectorAll('[data-action=wind],[data-action=light]').forEach(b=>b.hidden=scene.hasAttribute('data-focus-scene')&&!running);
-   scene.dataset.animate=String(allowed&&running&&visible.get(scene));
+   // Ambient scenery is independent of study/timer state, including the ready room.
+   const state=media.matches?'reduced':!enabled?'off':document.hidden?'hidden':!visible.get(scene)?'offscreen':'running';
+   scene.dataset.animate=String(state==='running');
+   scene.dataset.motionState=state;
+   scene.querySelectorAll('[data-action=wind],[data-action=light]').forEach(b=>b.hidden=false);
    scene.querySelectorAll('[data-action="motion"]').forEach(b=>{
-    b.hidden=scene.hasAttribute('data-focus-scene')&&!running;b.disabled=media.matches;b.setAttribute('aria-pressed',String(enabled&&!media.matches));
-    b.textContent=media.matches?'已减少动态':enabled?'动态：开':'动态：关';
-    b.title=media.matches?'遵循系统减少动态设置':'只控制装饰动画，不影响专注计时';
+    b.hidden=false;b.disabled=media.matches;b.setAttribute('aria-pressed',String(enabled&&!media.matches));
+    b.textContent=media.matches?'已减少动态':!enabled?'动态：关':state==='running'?'动态：开':'动态：暂停';
+    b.title=media.matches?'遵循系统减少动态设置':state==='hidden'||state==='offscreen'?'画面不可见时暂停，回来后自动继续':'只控制装饰动画，不影响专注计时';
    });
    scene.querySelectorAll('[data-action="wind"]').forEach(b=>{b.setAttribute('aria-pressed',String(scene.dataset.wind!=='off'));b.textContent=scene.dataset.wind==='off'?'风车：停':'风车：转'});
    scene.querySelectorAll('[data-action="light"]').forEach(b=>{b.setAttribute('aria-pressed',String(scene.dataset.light!=='off'));b.textContent=scene.dataset.light==='off'?'灯塔：灭':'灯塔：亮'});

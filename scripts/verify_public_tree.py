@@ -20,7 +20,7 @@ RULES = {
     'personal Windows user directory': re.compile(r'[A-Za-z]:[\\/]+Users[\\/]+(?!Public(?:[\\/]|\b))[^\\/\s"\'<>]+', re.I),
     'original private data path': re.compile('拾习' + r'本机私有数据|数据库大作业[\\/]+拾习-v2|Documents[\\/]+Codex[\\/]+2026-10-03', re.I),
 }
-TEXT_SUFFIXES = {'.py', '.md', '.json', '.html', '.js', '.css', '.sql', '.yml', '.yaml', '.ps1', '.cmd', '.txt', '.spec', '.toml', '.ini', '.cfg', '.svg'}
+TEXT_SUFFIXES = {'.py', '.md', '.json', '.html', '.js', '.cjs', '.mjs', '.css', '.sql', '.yml', '.yaml', '.ps1', '.cmd', '.txt', '.spec', '.toml', '.ini', '.cfg', '.svg'}
 
 
 def inspect(name: str, data: bytes) -> list[str]:
