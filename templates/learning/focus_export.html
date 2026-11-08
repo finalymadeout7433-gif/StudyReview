@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% block content %}
+<a class="back-link" href="{% url 'focus' %}">← 返回专注学习</a>
+<section class="page-heading"><div><h1>导出专注记录</h1><p>仅保存当前账户的专注时段及课程、任务参考信息。</p></div></section>
+<section class="panel form-panel">
+{% if export_error %}<div class="notice error" role="alert">{{ export_error }}</div><form method="post">{% csrf_token %}<button class="button primary">重试保存</button></form>
+{% else %}<h2>已保存到本机</h2><p>文件位于学习数据目录中。复制下面的完整路径，粘贴到文件资源管理器的地址栏即可找到文件。</p><label for="export-path">专注记录 JSON 文件位置</label><textarea id="export-path" rows="4" readonly spellcheck="false">{{ export_path }}</textarea><p>每次保存都会生成新文件，不覆盖之前的导出；文件只保存在这台电脑，没有上传或分享。</p>{% endif %}
+<p class="panel-note">这不是完整账号备份，不包含错题、复习历史和图片，也不能用来直接恢复整个账号。完整备份需要数据库与媒体文件。</p>
+</section>{% endblock %}

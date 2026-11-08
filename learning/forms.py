@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .models import Course, KnowledgePoint, Task, WrongQuestion, ReviewRecord
+from .models import Course, Chapter, KnowledgePoint, Task, WrongQuestion, ReviewRecord
 from .services import MIN_STAT_DATE, MAX_STAT_DATE
 from attachments.models import ImageRole
 
@@ -49,17 +49,35 @@ class CourseForm(forms.ModelForm):
 class PointForm(forms.ModelForm):
     class Meta:
         model = KnowledgePoint
-        fields = ['name']
+        fields = ['name', 'chapter']
 
     def __init__(self, *args, course, **kwargs):
         super().__init__(*args, **kwargs)
         self.course = course
+        self.instance.course = course
+        self.fields['chapter'].queryset = course.chapters.select_related('parent')
+        self.fields['chapter'].empty_label = '待归类（保留原有知识点）'
+        self.fields['chapter'].help_text = '选择本课程的章或节，原有错题关联和复习历史保持不变。'
 
     def clean_name(self):
         name = self.cleaned_data['name'].strip()
         if KnowledgePoint.objects.filter(course=self.course, name=name).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError('本课程已有同名知识点。')
         return name
+
+
+class ChapterForm(forms.ModelForm):
+    class Meta:
+        model = Chapter
+        fields = ['name', 'parent', 'position']
+
+    def __init__(self, *args, course, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.instance.course = course
+        self.fields['parent'].queryset = course.chapters.filter(parent=None).exclude(pk=self.instance.pk)
+        self.fields['parent'].empty_label = '顶层章'
+        self.fields['parent'].help_text = '课程 → 章 → 节 → 知识点；留空创建章，选择章创建节。'
+        self.fields['position'].help_text = '数字越小越靠前；相同排序按创建先后显示。'
 
 
 class CourseOwnedForm(forms.ModelForm):

@@ -1,4 +1,15 @@
 {% extends 'base.html' %}{% block content %}
-<section class="page-heading"><div><h1>今日复习</h1></div><span class="queue-total">{{ page_obj.paginator.count }} <small>题待复习</small></span></section>
-{% if page_obj %}<section class="panel">{% for question in page_obj %}<div class="list-row queue-row"><span class="question-number">{{ forloop.counter|stringformat:'02d' }}</span><div class="row-main"><a class="row-title" href="{% url 'review-question' question.pk %}">{{ question.title }}</a><p>{{ question.course.name }} · {{ question.next_review_date|date:'Y-m-d' }} 到期</p></div><a href="{% url 'review-question' question.pk %}" class="button {% if forloop.first %}primary{% else %}secondary{% endif %}">开始复习</a></div>{% endfor %}</section>{% include 'partials/pagination.html' %}{% else %}<section class="panel empty-state large-empty"><span class="empty-symbol">✓</span><h2>今天的复习已完成</h2><p>还没有错题时，可以先记录一道；未到期的错题会按安排日期出现。</p><div class="actions"><a class="button secondary" href="{% url 'question-list' %}">查看错题本</a><a class="button primary" href="{% url 'question-create' %}">记录错题</a></div></section>{% endif %}
+<section class="page-heading"><div><span class="eyebrow">回忆 · 对照 · 安排下一次</span><h1>今日复习</h1></div><span class="queue-total">{{ remaining }} <small>题待处理</small></span></section>
+{% include 'partials/review_scope.html' %}
+{% if page_obj %}
+<section class="panel">{% for question in page_obj %}<div class="list-row queue-row"><span class="question-number">{{ forloop.counter|stringformat:'02d' }}</span><div class="row-main"><a class="row-title" href="{% url 'review-question' question.pk %}{{ review_query }}">{{ question.title }}</a><p>{{ question.course.name }} · {{ question.next_review_date|date:'Y-m-d' }} 到期</p></div><a href="{% url 'review-question' question.pk %}{{ review_query }}" class="button {% if forloop.first %}primary{% else %}secondary{% endif %}">开始复习</a></div>{% endfor %}</section>{% include 'partials/pagination.html' %}
+{% else %}
+<section class="panel empty-state large-empty">
+<span class="empty-symbol">{% if skipped_count %}↩{% else %}✓{% endif %}</span>
+<h2>{% if skipped_count %}本轮已浏览，仍有 {{ skipped_count }} 题待复习{% else %}当前范围没有到期错题{% endif %}</h2>
+<p>{% if skipped_count %}暂时跳过不算完成复习。可以现在重新查看，也可以稍后从本范围继续。{% else %}未到期的题目会按安排出现；这不代表其他章节或课程也已完成。{% endif %}</p>
+<div class="actions">{% if skipped_count %}<a class="button primary" href="{{ scope_reset_url }}">重新查看跳过题</a>{% endif %}<a class="button secondary" href="{{ scope_questions_url }}">查看范围内错题</a>{% if not review_scope.params %}<a class="button primary" href="{% url 'question-create' %}">记录错题</a>{% endif %}</div>
+</section>
+{% endif %}
+{% if skipped_count and page_obj %}<p class="review-skipped-note">还有 {{ skipped_count }} 题暂时跳过，仍保留原到期日期。<a href="{{ scope_reset_url }}">重新查看本范围全部到期题</a></p>{% endif %}
 {% endblock %}

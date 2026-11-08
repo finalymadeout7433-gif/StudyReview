@@ -1,0 +1,16 @@
+/* Hide only the outer page's scroll track, never its scrolling behavior.
+   Inner editors, tables, assistant history and text areas keep their own bars. */
+html {
+  scrollbar-width: none;
+  scrollbar-gutter: auto;
+}
+html::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+/* Respect the user's high-contrast accessibility mode and its native affordances. */
+@media (forced-colors: active) {
+  html { scrollbar-width: auto; scrollbar-gutter: stable; }
+  html::-webkit-scrollbar { display: block; width: auto; height: auto; }
+}

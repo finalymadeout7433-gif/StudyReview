@@ -6,11 +6,13 @@ import os
 from pathlib import Path
 import sys
 from .runtime import inside,child_path,DesktopError
+from config.version import BUILD_VERSION
 
 TABLES = {
+    'learning_focussession','learning_focusinterval',
     'auth_group','auth_group_permissions','auth_permission','auth_user','auth_user_groups','auth_user_user_permissions',
     'django_content_type','django_migrations','django_session',
-    'learning_course','learning_knowledgepoint','learning_task','learning_wrongquestion','learning_questionknowledgepoint','learning_reviewrecord',
+    'learning_course','learning_chapter','learning_knowledgepoint','learning_task','learning_wrongquestion','learning_questionknowledgepoint','learning_reviewrecord',
     'attachments_attachment','attachments_questionimage','attachments_reviewimagemanifest','attachments_reviewimagesnapshot',
     'assistant_chatsession','assistant_message','assistant_messageattachment','assistant_draft',
     'scheduling_schedulingstate','scheduling_scheduleevent','ai_gateway_account','ai_gateway_requestledger','ai_gateway_messagecontext',
@@ -18,7 +20,9 @@ TABLES = {
 TRIGGERS = {'study_review_no_update','study_review_no_delete','study_point_same_course_insert','study_point_same_course_update',
     'study_task_no_move','study_wrongquestion_no_move','study_knowledgepoint_no_move',
     'att_image_no_update','att_image_no_delete','att_manifest_no_update','att_manifest_no_delete',
-    'att_snapshot_no_update','att_snapshot_no_delete','study_schedule_no_update','study_schedule_no_delete'}
+    'att_snapshot_no_update','att_snapshot_no_delete','study_schedule_no_update','study_schedule_no_delete',
+    'study_chapter_insert','study_chapter_update','study_point_chapter_insert','study_point_chapter_update',
+    'study_focus_owner_insert','study_focus_owner_update','study_focus_task_insert','study_focus_task_update'}
 
 def diagnose(resource_dir=None, data_dir=None, credentials_file=None, database=False, settings_module='config.settings'):
     resources=Path(resource_dir or os.environ.get('STUDY_RESOURCE_DIR') or getattr(sys,'_MEIPASS',Path(__file__).resolve().parent.parent)).resolve()
@@ -27,7 +31,7 @@ def diagnose(resource_dir=None, data_dir=None, credentials_file=None, database=F
         local=os.environ.get('LOCALAPPDATA')
         selected_data=(Path(local) if local else Path.home())/'StudyReview'/'data'
     data=Path(selected_data).resolve()
-    report={'app':'studyreview','version':'2.0','read_only':True,'ready_to_launch':False,'configured':False,
+    report={'app':'studyreview','version':BUILD_VERSION,'read_only':True,'ready_to_launch':False,'configured':False,
         'database_requested':bool(database),'database_checked':False,'database_ready':False,'checks':[],
         'credentials_values_recorded':False,'real_ai_called':False}
     def check(code,passed,message):
@@ -103,9 +107,9 @@ def diagnose(resource_dir=None, data_dir=None, credentials_file=None, database=F
             missing=sorted(TABLES-tables)
             report['missing_tables']=missing
             check('schema_tables',not missing,'需要完整 V2 表结构；缺失时先按全新空库初始化/恢复说明操作，不覆盖现有库。')
-            check('history_guards',not(TRIGGERS-triggers),'需要15个历史和关系保护触发器；由既有本机管理员核验迁移与权限。')
+            check('history_guards',not(TRIGGERS-triggers),'需要23个历史、章节、专注和关系保护触发器；由既有本机管理员核验迁移与权限。')
             if 'django_migrations'in tables:
-                cursor.execute('SELECT COUNT(*) FROM django_migrations WHERE app=%s AND name=%s',('scheduling','0003_override_null_guard'))
+                cursor.execute('SELECT COUNT(*) FROM django_migrations WHERE app=%s AND name=%s',('learning','0012_focus_task_guards'))
                 check('migration_marker',cursor.fetchone()[0]==1,'V2迁移记录完整；仅导入结构SQL不能代替正式迁移或完整数据恢复。')
         report['database_ready']=all(item['passed']for item in report['checks'])
         report['ready_to_launch']=report['database_ready']

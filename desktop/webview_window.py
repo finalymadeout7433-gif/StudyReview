@@ -158,15 +158,35 @@ def open_window(server, profile, smoke_seconds=0, on_ready=None):
     webview.settings["ALLOW_DOWNLOADS"] = False
     webview.settings["IGNORE_SSL_ERRORS"] = False
     webview.settings["REMOTE_DEBUGGING_PORT"] = None
+    from config.version import WINDOW_TITLE
     window = webview.create_window(
-        "拾习 · 学习与复习", html=STARTING_HTML, js_api=None,
+        WINDOW_TITLE, html=STARTING_HTML, js_api=None,
         width=1280, height=880, min_size=(390, 600),
-        background_color="#F7F2ED", text_select=True,
+        background_color="#F7F2ED", text_select=True, confirm_close=True,
+        localization={"global.quitConfirmation": "退出拾习前，请确认已保存正在编辑的内容。\n未保存的文字和图片关联不会在重启后恢复。\n如有专注计时，请先暂停或结束。\n\n确定：退出拾习；取消：返回检查。"},
     )
-    guard = WebView2Guard(window, server.base_url, on_failure=server.stop_requested.set)
+    def close_for_shutdown():
+        # Explicit maintenance stop, diagnostic timeout or fatal failure must not
+        # wait for an interactive dialog. Normal title-bar close keeps the warning.
+        window.confirm_close = False
+        window.destroy()
+
+    def guard_failed():
+        window.confirm_close = False
+        server.stop_requested.set()
+
+    guard = WebView2Guard(window, server.base_url, on_failure=guard_failed)
+    from .pixel_chrome import install_pixel_chrome
+    def prepare_chrome():
+        try:
+            install_pixel_chrome(window)
+        except Exception:
+            # Native standard chrome remains usable if dependencies are absent.
+            pass
+    window.events.before_show += prepare_chrome
     window.events.before_show += guard.before_show
     window.events.closed += server.stop_requested.set
-    server.exit_callback = window.destroy
+    server.exit_callback = close_for_shutdown
 
     def verify_renderer(renderer):
         if renderer != "edgechromium":
@@ -178,21 +198,21 @@ def open_window(server, profile, smoke_seconds=0, on_ready=None):
     def supervise():
         if not guard.installed.wait(timeout=20):
             guard.error = "WebView2 窗口初始化超时，请检查运行库。"
-            window.destroy()
+            close_for_shutdown()
             return
         if on_ready:
             on_ready(window, guard)
         deadline = None if not smoke_seconds else __import__("time").monotonic() + smoke_seconds
         while not server.stop_requested.wait(.25):
             if server.failed() or (deadline and __import__("time").monotonic() >= deadline):
-                window.destroy()
+                close_for_shutdown()
                 return
 
     supervisor = threading.Thread(target=supervise, name="StudyReview-supervisor", daemon=True)
     supervisor.start()
     smoke_timer = None
     if smoke_seconds:
-        smoke_timer = threading.Timer(smoke_seconds, window.destroy)
+        smoke_timer = threading.Timer(smoke_seconds, close_for_shutdown)
         smoke_timer.daemon = True
         smoke_timer.start()
     try:

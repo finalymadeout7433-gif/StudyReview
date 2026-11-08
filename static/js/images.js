@@ -62,9 +62,9 @@
           if (!response.ok) throw new Error(typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail || data.error || '图片保存失败。'));
           if (!safeMedia(data.url) || !safeMedia(data.thumbnail_url)) throw new Error('图片响应格式不正确。');
           if (!this.items.some(item => item.id === data.id)) this.items.push({...data,role:'question'});
-          this.status.textContent = this.mode==='chat'?'':`已保存 ${this.items.length} 张图片。`; this.render();
+          this.status.textContent = this.mode==='chat'?'':`已添加 ${this.items.length} 张图片，请保存错题完成关联。`; this.render();
         } catch (error) { this.status.textContent = error.message || '上传失败，请再次选择图片重试。'; }
-        finally { this.pending--; }
+        finally { this.pending--; this.form?.dispatchEvent(new Event('imageschanged')); }
       }
     }
     render() {
@@ -86,7 +86,7 @@
         remove.addEventListener('click', () => { this.items.splice(index,1); this.render(); this.status.textContent=''; }); card.append(remove); this.list.append(card);
       }); this.sync();
     }
-    sync() { if (this.payload) this.payload.value=JSON.stringify(this.items.map(item => ({id:item.id,role:item.role || 'question'}))); }
+    sync() { if (this.payload) this.payload.value=JSON.stringify(this.items.map(item => ({id:item.id,role:item.role || 'question'}))); this.form?.dispatchEvent(new Event('imageschanged')); }
     ids() { return this.items.map(item => item.id); }
     clear() { this.items=[]; this.render(); this.status.textContent=''; }
   }

@@ -1,0 +1,76 @@
+/* Course curriculum, daily focus and accessible compact layouts. */
+:root { --muted: #59665c; }
+.focus-card { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:26px 30px; margin-bottom:24px; border:1px solid #cddbd1; border-radius:16px; background:linear-gradient(110deg,#e6efe7,#f5f6ed); }
+.focus-card h2 { font-size:24px; margin:4px 0 7px; }
+.focus-card p { color:#526354; margin:0; }
+.focus-card .eyebrow { color:#46654e; }
+.focus-card .actions { flex-shrink:0; }
+.course-overview { display:grid; grid-template-columns:2fr repeat(3,1fr); align-items:center; gap:24px; padding:24px 28px; border:1px solid var(--border); border-radius:14px; background:var(--surface); margin:0 0 28px; }
+.course-overview strong { display:block; font-size:28px; color:#315740; line-height:1.4; }
+.course-overview small { font-size:14px; font-weight:400; color:var(--muted); }
+.course-overview progress { display:block; width:100%; max-width:350px; height:7px; border:0; border-radius:8px; overflow:hidden; margin-top:12px; background:#e6ebe2; accent-color:#3b6b59; }
+progress::-webkit-progress-bar { background:#e6ebe2; }
+progress::-webkit-progress-value { background:#3b6b59; border-radius:8px; }
+.course-overview-count { border-left:1px solid var(--border); padding-left:24px; }
+.course-overview-count span { font-size:13px; color:var(--muted); }
+.course-workspace { display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:24px; align-items:start; }
+.curriculum-panel { padding-bottom:20px; }
+.curriculum-panel .panel-heading { align-items:flex-start; flex-wrap:wrap; gap:14px; }
+.curriculum-panel .panel-note { margin:5px 0 0; font-size:12px; }
+.chapter-node { margin-top:16px; border:1px solid #dce4d8; border-radius:10px; overflow:hidden; }
+.chapter-node>summary,.section-node>summary { cursor:pointer; padding:14px 16px; overflow-wrap:anywhere; }
+.chapter-node>summary { background:#f2f5ee; }
+.chapter-node summary strong { margin-right:12px; }
+.chapter-node[open]>summary { border-bottom:1px solid #e2e8df; }
+.chapter-number { font-family:Bahnschrift,sans-serif; color:#557349; margin:0 10px 0 3px; }
+.chapter-meta { color:#65745e; font-size:12px; white-space:normal; }
+.chapter-body { padding:0 16px 12px; }
+.chapter-tools { display:flex; justify-content:flex-end; gap:16px; padding:9px 0; font-size:12px; }
+.chapter-tools a { color:#566a4c; padding:3px 0; }
+.section-node { margin:8px 0 10px 10px; border-left:2px solid #cad7c4; }
+.section-node>summary { background:#fafbf7; padding:10px 12px; }
+.section-body { padding:0 12px 4px; }
+.curriculum-point { display:flex; align-items:center; gap:10px; min-height:62px; border-top:1px solid #edf0e8; }
+.curriculum-point-name { flex:1; min-width:0; overflow-wrap:anywhere; color:var(--text); font-size:14px; }
+.curriculum-point-name small { display:block; font-size:12px; color:#64765a; }
+.curriculum-point .row-actions { font-size:12px; gap:10px; flex-shrink:0; }
+.curriculum-point .row-actions a { padding:7px 0; }
+.curriculum-empty { padding:12px 0; color:var(--muted); font-size:13px; }
+.unassigned>summary { background:#faf5eb; }
+.course-side-actions { display:grid; gap:10px; padding:20px 0; }
+.study-tip { padding:24px 12px; font-size:13px; color:#606d58; }
+.study-tip p { margin:8px 0; }
+.insight-nav { position:sticky; top:0; z-index:4; background:var(--canvas); padding:12px 0; flex-wrap:wrap; border-bottom:1px solid var(--border); }
+#review-patterns,#course-diagnostics,#knowledge-map,#memory-lab { scroll-margin-top:85px; }
+.insight-nav a { min-height:40px; display:inline-flex; align-items:center; }
+.range-shortcuts { flex-wrap:wrap; }
+.row-main,.row-title { overflow-wrap:anywhere; }
+.button:focus-visible,summary:focus-visible,a:focus-visible { outline:3px solid #37604a; outline-offset:3px; }
+@media(max-width:1200px) { .course-workspace { grid-template-columns:minmax(0,1fr); } .course-side { display:grid; grid-template-columns:2fr 1fr; gap:20px; } .focus-card { align-items:flex-start; } }
+@media(max-width:900px) { .focus-card { flex-direction:column; gap:16px; padding:22px; } .course-overview { gap:16px; padding:20px; grid-template-columns:repeat(3,minmax(0,1fr)); } .course-overview>div:first-child { grid-column:1/-1; } .course-overview-count { padding-left:14px; } .course-overview>div:nth-child(2) { border-left:0; padding-left:0; } .course-side { display:block; } }
+@media(max-width:620px) { .chapter-body { padding:0 10px 10px; } .chapter-node>summary { padding:13px 10px; } .section-node { margin-left:0; } .curriculum-point { flex-wrap:wrap; } .curriculum-point-name { flex-basis:65%; } .curriculum-point .row-actions { margin-left:22px; } .curriculum-panel { padding:0 14px 18px; } .focus-card .actions { flex-wrap:wrap; } .focus-card h2 { font-size:21px; } .course-overview-count strong { font-size:24px; } .insight-nav { position:static; } .course-workspace { gap:18px; } }
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; } }
+@media(max-width:620px) {
+  .page-heading { flex-direction:column; align-items:flex-start; gap:16px; }
+  .page-heading>div:first-child { width:100%; }
+  .page-heading>.actions { width:100%; justify-content:flex-start; flex-wrap:wrap; }
+}
+@media(min-width:621px) and (max-width:1050px) {
+  .task-table { min-width:0; width:100%; table-layout:auto; }
+  .task-table colgroup,.task-table thead { display:none; }
+  .task-table,.task-table tbody { display:block; }
+  .task-table tr { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px 16px; padding:18px; border-bottom:1px solid var(--border); }
+  .task-table td { display:block; width:auto; padding:0!important; border:0; }
+  .task-table .task-cell { grid-column:1/-1; }
+  .task-table .course-cell { grid-column:1; grid-row:2; }
+  .task-table .deadline-cell { grid-column:2; grid-row:2; }
+  .task-table .status-cell { grid-column:1; grid-row:3; }
+  .task-table .actions-cell { grid-column:2; grid-row:3; }
+  .task-table .actions-cell .row-actions { justify-content:flex-end; }
+  .task-panel .table-scroll-hint { display:none; }
+  .task-table td[colspan] { grid-column:1/-1; }
+}
+
+.row-actions>a[aria-label^="专注任务"]{font-weight:600;color:#345d49;border-bottom:1px solid #b8c8b8;padding-bottom:2px}.row-actions>a[aria-label^="专注任务"]:focus-visible{outline:2px solid #527b60;outline-offset:4px}
+
+.learning-path{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.learning-path h3{font-size:16px;margin:8px 0}.learning-path p{font-size:13px;line-height:1.7;margin:0}@media(max-width:700px){.learning-path{grid-template-columns:1fr;gap:20px}}

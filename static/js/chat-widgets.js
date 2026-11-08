@@ -37,7 +37,7 @@
     $('mi-empty').hidden=hasMessages||panel.classList.contains('is-thinking');$('mi-message-log').hidden=!hasMessages;
     const title=select.selectedOptions[0]?.textContent?.split(' · ')[0];$('mi-chat-title').textContent=title||'新对话';
     $('mi-no-sessions').hidden=select.options.length>0;$('mi-session-list').replaceChildren();
-    [...select.options].forEach(option=>{const button=document.createElement('button');button.type='button';button.className='mi-session-item';button.textContent=option.textContent.split(' · ')[0];button.title=option.textContent;button.setAttribute('aria-current',String(option.selected));button.addEventListener('click',()=>{select.value=option.value;select.dispatchEvent(new Event('change'));panel.classList.remove('mi-history-open');});$('mi-session-list').append(button);});
+    [...select.options].forEach(option=>{const button=document.createElement('button');button.type='button';button.className='mi-session-item';button.textContent=option.textContent.split(' · ')[0];button.title=option.textContent;button.setAttribute('aria-current',String(option.selected));button.addEventListener('click',()=>{select.value=option.value;select.dispatchEvent(new Event('change'));closeHistory();});$('mi-session-list').append(button);});
     text.style.height='auto';text.style.height=Math.min(150,Math.max(50,text.scrollHeight))+'px';
   }
   document.addEventListener('study-assistant-ui',sync);
@@ -48,7 +48,11 @@
   panel.querySelectorAll('[data-chat-prompt]').forEach(button=>button.addEventListener('click',()=>{text.value=button.dataset.chatPrompt;text.dispatchEvent(new Event('input'));text.focus();}));
   function tools(){panel.querySelector('[data-mi-pane=chat]').click();$('mi-composer-options').open=!$('mi-composer-options').open;$('mi-more-menu').open=false;}
   $('mi-compose-tools').addEventListener('click',tools);$('mi-open-tools').addEventListener('click',tools);
+  function closeHistory(){panel.classList.remove('mi-history-open');$('mi-history-toggle').setAttribute('aria-expanded','false');}
   $('mi-history-toggle').addEventListener('click',()=>{$('mi-history-toggle').setAttribute('aria-expanded',String(panel.classList.toggle('mi-history-open')));});
+  $('mi-history-close')?.addEventListener('click',()=>{closeHistory();$('mi-history-toggle').focus();});
+  $('mi-new-session').addEventListener('click',closeHistory);
+  panel.addEventListener('close',closeHistory);
   $('mi-maximize').addEventListener('click',()=>{const full=panel.classList.toggle('mi-maximized');$('mi-maximize').setAttribute('aria-pressed',String(full));$('mi-maximize').textContent=full?'还原':'展开';});
   sync();
 })();

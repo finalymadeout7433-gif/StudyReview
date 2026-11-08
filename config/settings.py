@@ -10,6 +10,7 @@ BASE_DIR = Path(os.environ.get('STUDY_RESOURCE_DIR', Path(__file__).resolve().pa
 DATA_DIR = Path(os.environ.get('STUDY_DATA_DIR', BASE_DIR)).resolve()
 PRIVATE_DATA_ROOT = DATA_DIR / 'private'
 DEBUG = os.environ.get('STUDY_DEBUG', '1') == '1'
+DESKTOP_NATIVE = os.environ.get('STUDY_DESKTOP_NATIVE') == '1'
 SECRET_KEY = os.environ.get('STUDY_SECRET_KEY')
 if not SECRET_KEY:
     secret_path = DATA_DIR / 'private' / 'django-secret.key'

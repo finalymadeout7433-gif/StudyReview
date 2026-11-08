@@ -1,0 +1,21 @@
+/* Smaller exterior gutters, a useful reading width, and a living sidebar. */
+.app-shell,.mi-open .app-shell{max-width:1920px;grid-template-columns:208px minmax(0,1fr);gap:22px;padding:16px 18px 0}
+.sidebar{top:16px;height:calc(100dvh - 32px);min-height:550px;padding:20px 11px 10px}
+.pixel-sidebar-garden{display:flex;flex:1 1 160px;min-height:110px;max-height:460px;flex-direction:column;margin:18px 3px 14px}
+.pixel-sidebar-garden .sidebar-art{display:block;flex:1 1 auto;width:100%;height:0;min-height:80px;object-fit:cover;image-rendering:pixelated}
+.pixel-sidebar-garden p{flex:0 0 auto;padding:7px 3px}
+.sidebar .user-panel{margin-top:0;flex:0 0 auto}
+@media(min-width:1600px){.app-shell,.mi-open .app-shell{grid-template-columns:224px minmax(0,1fr);gap:28px;padding-left:22px;padding-right:22px}.sidebar{padding:22px 14px 12px}}
+@media(max-width:1200px){.app-shell,.mi-open .app-shell{grid-template-columns:190px minmax(0,1fr);gap:18px;padding:16px}.sidebar{padding-left:9px;padding-right:9px}}
+@media(max-height:830px) and (min-width:761px){.sidebar{padding-top:16px;min-height:540px}.pixel-sidebar-garden{display:none}.sidebar .user-panel{margin-top:auto}}
+@media(max-width:760px){.app-shell,.mi-open .app-shell{display:block;padding:12px}.sidebar{position:static;height:auto;min-height:0;padding:15px 12px 12px}.pixel-sidebar-garden{display:none}.sidebar .user-panel{margin:0}.main-content{padding-top:19px}}
+@media print{.app-shell,.mi-open .app-shell{display:block;padding:0}.sidebar,.pixel-sidebar-garden{display:none!important}}
+/* Small task cards give course names a full line instead of a squeezed table column. */
+@media(max-width:580px){
+ .task-table tr{grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;padding:16px 14px}
+ .task-table .course-cell{grid-column:1/-1;grid-row:2;min-width:0;overflow-wrap:anywhere}
+ .task-table .deadline-cell{grid-column:1;grid-row:3}
+ .task-table .status-cell{grid-column:2;grid-row:3;text-align:right}
+ .task-table .actions-cell{grid-column:1/-1;grid-row:4;border-top:1px dashed var(--border);padding-top:10px!important}
+ .task-table .actions-cell .row-actions{justify-content:flex-start;flex-wrap:wrap;gap:10px 14px}
+}

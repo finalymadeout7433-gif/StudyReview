@@ -14,7 +14,7 @@ from django.db import transaction
 from django.db.models import Count, Q
 from django.http import Http404
 from django.utils import timezone
-from .models import Course, KnowledgePoint, Task, WrongQuestion, QuestionKnowledgePoint, ReviewRecord
+from .models import Course, Chapter, KnowledgePoint, Task, WrongQuestion, QuestionKnowledgePoint, ReviewRecord
 from attachments.models import ImageRole
 from attachments.services import sync_question_images, snapshot_question_images
 from scheduling.models import SchedulingState
@@ -107,9 +107,41 @@ def save_point(user, course_id, values, pk=None):
     else:
         point = KnowledgePoint(course=course)
     point.name = values['name'].strip()
+    if 'chapter' in values:
+        point.chapter = values['chapter']
     point.full_clean()
     point.save()
     return point
+
+
+@transaction.atomic
+def save_chapter(user, course_id, values, pk=None):
+    course = owned_course(user, course_id, lock=True, writable=True)
+    if pk:
+        try:
+            chapter = Chapter.objects.select_for_update().get(pk=pk, course=course)
+        except Chapter.DoesNotExist:
+            raise Http404()
+    else:
+        chapter = Chapter(course=course)
+    chapter.name = values['name'].strip()
+    chapter.parent = values.get('parent')
+    chapter.position = values.get('position', 0)
+    chapter.full_clean()
+    chapter.save()
+    return chapter
+
+
+@transaction.atomic
+def delete_chapter(user, course_id, pk):
+    course = owned_course(user, course_id, lock=True, writable=True)
+    try:
+        chapter = Chapter.objects.select_for_update().get(pk=pk, course=course)
+    except Chapter.DoesNotExist:
+        raise Http404()
+    if chapter.children.exists() or chapter.knowledge_points.exists():
+        raise ValidationError('章节仍有子节或知识点，请先调整归属；不会连带删除学习内容。')
+    chapter.delete()
 
 
 @transaction.atomic

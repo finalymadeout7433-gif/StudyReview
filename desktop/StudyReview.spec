@@ -1,7 +1,11 @@
 # A local onedir candidate. User data, credentials and model keys are excluded.
 from pathlib import Path
+import sys
 from PyInstaller.utils.hooks import collect_submodules, collect_data_files, copy_metadata
 ROOT = Path(SPECPATH).resolve().parent
+# collect_submodules runs before Analysis(pathex=...) takes effect. Make the
+# application packages discoverable even when building from outside ROOT.
+sys.path.insert(0, str(ROOT))
 apps = ('learning','attachments','assistant','scheduling','ai_gateway')
 hidden = ['config.settings','config.v2_development_settings','config.v2_migration_settings','config.local_runtime',
           'config.urls','config.health','config.wsgi',

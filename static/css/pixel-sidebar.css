@@ -1,0 +1,6 @@
+/* Complementary page vignettes. No motion, external assets, or navigation changes. */
+.pixel-sidebar-garden { background:var(--scene-sky); }
+.pixel-sidebar-garden .pixel-sidebar-art { object-fit:contain; object-position:center; background:var(--scene-sky); }
+body[data-section="focus"] .pixel-sidebar-garden { background:#243f3c; border-color:#547266; }
+body[data-section="focus"] .pixel-sidebar-garden .pixel-sidebar-art { background:#243f3c; }
+body[data-section="focus"] .pixel-sidebar-garden p { background:#dce5ca; color:#344f43; }
