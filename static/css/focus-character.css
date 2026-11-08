@@ -1,0 +1,40 @@
+/* Original scholar sprites. Only transforms/opacity animate; no canvas, images or layout loops. */
+.focus-scholar{pointer-events:none;opacity:0}
+.focus-scholar[data-character]:not([data-character="idle"]){opacity:1}
+.scholar-position{transform:translate(184px,106px)}
+.focus-scholar:is([data-character="reading"],[data-character="writing"]) .scholar-position{transform:translate(148px,98px)}
+.scholar-head{transform-origin:0 -12px}
+.scholar-seated-legs,.scholar-arm-study,.scholar-drink-arm,.scholar-chair-back{display:none}
+.focus-scholar:is([data-character="reading"],[data-character="writing"]) :is(.scholar-seated-legs,.scholar-arm-study,.scholar-chair-back){display:inline}
+.focus-scholar:is([data-character="reading"],[data-character="writing"]) :is(.scholar-legs,.scholar-arm-rest){display:none}
+.scholar-arm-study{transform:translateY(-5px)}
+.focus-scholar[data-character="reading"] .scholar-head{animation:scholar-read 5s steps(2,end) infinite}
+.focus-scholar[data-character="writing"] .scholar-head{transform:translate(-1px,2px) rotate(-5deg) scaleX(-1)}
+.focus-scholar[data-character="writing"] .scholar-writing-hand{animation:scholar-write 1.2s steps(3,end) infinite}
+.focus-scholar[data-character="entering"] .scholar-position{animation:scholar-enter 2.4s steps(24,end) both}
+.focus-scholar:is([data-character="entering"],[data-character="walking"]) .scholar-body{animation:scholar-bob .48s steps(2,end) infinite}
+.focus-scholar:is([data-character="entering"],[data-character="walking"]) .scholar-leg-left{animation:scholar-step .48s steps(2,end) infinite}
+.focus-scholar:is([data-character="entering"],[data-character="walking"]) .scholar-leg-right{animation:scholar-step .48s steps(2,end) infinite reverse}
+.focus-scholar[data-character="walking"] .scholar-position{animation:scholar-stroll 8s steps(36,end) both}
+.focus-scholar[data-character="drinking"] .scholar-drink-arm{display:inline}
+.focus-scholar[data-character="drinking"] .scholar-arm-rest{display:none}
+.focus-scholar[data-character="drinking"] .scholar-head{animation:scholar-sip 4s steps(2,end) infinite}
+.focus-scholar[data-character="stretching"] .scholar-body{animation:scholar-stretch 4s steps(4,end) infinite;transform-origin:0 25px}
+.pixel-room[data-character-motion="off"] .focus-scholar *{animation:none!important}
+.pixel-room[data-character-motion="off"] .focus-scholar[data-character="reading"] .scholar-head{transform:scaleX(-1)}
+
+.pixel-room[data-light="on"] .room-lantern-core{fill:#fff5a3;filter:drop-shadow(0 0 3px #ffe386)}
+.pixel-room[data-light="off"] .room-lantern-core{fill:#59645c}
+.pixel-room[data-light="on"] .room-beam{opacity:.85;fill:#fff4af}
+@keyframes scholar-enter{from{transform:translate(330px,106px)}to{transform:translate(184px,106px)}}
+@keyframes scholar-stroll{0%,100%{transform:translate(184px,106px)}45%,55%{transform:translate(240px,106px)}}
+@keyframes scholar-bob{50%{transform:translateY(-1px)}}
+@keyframes scholar-step{50%{transform:translateY(-3px)}}
+@keyframes scholar-read{0%,65%,100%{transform:translate(0,0) scaleX(-1)}75%,90%{transform:translate(-1px,2px) scaleX(-1)}}
+@keyframes scholar-write{50%{transform:translate(-2px,-1px)}}
+@keyframes scholar-sip{30%,70%{transform:rotate(-7deg)}}
+@keyframes scholar-stretch{40%,65%{transform:translateY(-3px) rotate(-4deg)}}
+@media(prefers-reduced-motion:reduce){.focus-scholar *{animation:none!important}}
+
+.scholar-pen{display:none}
+.focus-scholar[data-character="writing"] .scholar-pen{display:inline}

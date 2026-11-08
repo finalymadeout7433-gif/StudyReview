@@ -1,0 +1,6 @@
+/* Ordinary document navigation paints immediately without multi-card snapshots. */
+@view-transition { navigation: none; }
+:root { view-transition-name: none; }
+.sidebar .nav-link.navigation-pending { filter: brightness(.92); }
+/* Avoid stacking the legacy chart fade on the single page entrance. */
+.chart-host, .heatmap-host { animation: none; }

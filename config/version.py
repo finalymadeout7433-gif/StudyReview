@@ -1,5 +1,4 @@
-"""One visible build identity; the desktop control protocol remains compatible."""
-
-BUILD_VERSION = '2.2.0-defense.20261108.sync1'
-BUILD_LABEL = '答辩同步版 · 2026.11.08（队友v2.2 + 本机优化）'
+"""One visible build identity; desktop protocol unchanged."""
+BUILD_VERSION = '2.2.0-defense.20261108.pixel5'
+BUILD_LABEL = '像素生活版 · 2026.11.08（v2.2 + 学习工坊）'
 WINDOW_TITLE = f'拾习 · {BUILD_LABEL}'

@@ -176,6 +176,14 @@ def open_window(server, profile, smoke_seconds=0, on_ready=None):
         server.stop_requested.set()
 
     guard = WebView2Guard(window, server.base_url, on_failure=guard_failed)
+    from .pixel_chrome import install_pixel_chrome
+    def prepare_chrome():
+        try:
+            install_pixel_chrome(window)
+        except Exception:
+            # Native standard chrome remains usable if dependencies are absent.
+            pass
+    window.events.before_show += prepare_chrome
     window.events.before_show += guard.before_show
     window.events.closed += server.stop_requested.set
     server.exit_callback = close_for_shutdown
