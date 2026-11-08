@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<a class="back-link" href="{% url 'question-detail' question.pk %}">← 返回原错题</a>
+<section class="page-heading">
+  <div><span class="eyebrow">{{ question.course.name }} / 类似题练习</span><h1>练一道类似题</h1></div>
+</section>
+<div class="review-layout">
+  <section class="panel prose-panel">
+    <h2>题目</h2>
+    <div class="text-block question-body">{{ variant.prompt }}</div>
+    {% if revealed %}
+    <div class="reference-answer">
+      <h3>参考答案</h3>
+      <div class="text-block">{{ variant.answer|linebreaksbr }}</div>
+      <h3>易错点</h3>
+      <div class="text-block">{{ variant.explanation }}</div>
+    </div>
+    {% endif %}
+  </section>
+  <section class="panel form-panel">
+    {% if revealed %}
+    <h2>你的作答</h2>
+    <div class="text-block">{{ form.cleaned_data.answer|linebreaksbr }}</div>
+    {% if save_error %}<p class="field-error" role="alert">{{ save_error }}</p>{% endif %}
+    <div class="actions">
+      {% if save_token %}
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="save">
+        <input type="hidden" name="save_token" value="{{ save_token }}">
+        <textarea name="answer" hidden>{{ form.cleaned_data.answer }}</textarea>
+        <button class="button primary" type="submit">记录到错题本</button>
+      </form>
+      {% endif %}
+      <a class="button secondary" href="{% url 'question-variant' question.pk %}">再练一次</a>
+    </div>
+    {% else %}
+    <form method="post" class="stack-form">
+      {% csrf_token %}
+      {% include 'partials/fields.html' %}
+      <button class="button primary" type="submit">提交作答并查看解析</button>
+    </form>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

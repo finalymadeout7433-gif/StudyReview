@@ -168,6 +168,10 @@ class AnswerForm(forms.Form):
     token = forms.CharField(widget=forms.HiddenInput)
 
 
+class VariantAnswerForm(AnswerForm):
+    token = None
+
+
 class ReviewForm(AnswerForm):
     rating = forms.ChoiceField(label='本次回忆情况', choices=[('', '请选择'),
         ('again', '未独立答对 / 看过答案'), ('hard', '独立答对，仍费力'), ('good', '独立正确，较熟练')],
